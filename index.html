@@ -1,0 +1,1335 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>برج دانش</title>
+<meta name="theme-color" content="#1D3A8A">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<style>
+:root{
+  color-scheme: light;
+  --bg:#EAF4F3; --surface:#FFFFFF; --ink:#14285E; --muted:#56668A; --line:#C4D8D6;
+  --lapis:#1D3A8A; --teal:#1F9E9A; --saffron:#F2A93B; --coral:#C93A32; --ok:#17794E;
+  --btn-bg:#1D3A8A; --btn-ink:#FFFFFF; --soft:#DCEEEC; --on-saffron:#14285E;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    color-scheme: dark;
+    --bg:#0D1828; --surface:#15263E; --ink:#E7EFF9; --muted:#9FB2CE; --line:#2A4262;
+    --lapis:#6F8FF2; --teal:#3CC5BF; --saffron:#F5B755; --coral:#FF8077; --ok:#52D6A0;
+    --btn-bg:#6F8FF2; --btn-ink:#0D1828; --soft:#1B3050; --on-saffron:#14285E;
+  }
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"Vazirmatn","Vazir","Samim","IRANSans",Tahoma,system-ui,sans-serif;
+  line-height:1.8; font-size:16px;
+  min-height:100dvh; display:flex; justify-content:center;
+}
+.app{width:100%; max-width:480px; padding:14px 16px calc(92px + env(safe-area-inset-bottom)); position:relative}
+.m{unicode-bidi:isolate; direction:ltr; display:inline-block; font-weight:600}
+button{font-family:inherit; font-size:inherit; color:inherit; cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--saffron); outline-offset:2px}
+
+/* header */
+.head{display:flex; align-items:center; gap:12px; margin-bottom:6px}
+.badge{
+  width:52px; height:52px; border-radius:14px; flex:none;
+  background:
+    conic-gradient(from 45deg, var(--lapis) 0 25%, var(--teal) 0 50%, var(--lapis) 0 75%, var(--teal) 0) ;
+  display:grid; place-items:center; color:#fff; font-weight:800; font-size:22px;
+  box-shadow:0 0 0 3px var(--saffron);
+}
+.badge span{background:rgba(10,20,50,.72); border-radius:8px; padding:0 8px; line-height:1.5}
+.who{flex:1; min-width:0}
+.who b{display:block; font-size:18px; line-height:1.4}
+.bar{height:10px; background:var(--soft); border-radius:99px; overflow:hidden; margin-top:6px}
+.bar i{display:block; height:100%; background:var(--saffron); border-radius:99px; width:0; transition:width .5s}
+.xpline{font-size:13px; color:var(--muted); margin-top:2px}
+
+/* tower */
+.sky{
+  margin-top:10px; border-radius:20px; padding:18px 10px 0; min-height:370px;
+  background:linear-gradient(180deg, var(--soft), var(--bg));
+  display:flex; flex-direction:column; align-items:center; justify-content:flex-end; position:relative; overflow:hidden;
+  border:1px solid var(--line);
+}
+.flag{font-size:30px; line-height:1; margin-bottom:2px; color:var(--saffron); filter:drop-shadow(0 2px 0 rgba(0,0,0,.15))}
+.floors{display:flex; flex-direction:column; align-items:center}
+.floor{
+  height:28px; display:flex; justify-content:space-evenly; align-items:center;
+  border-radius:4px 4px 0 0; border-bottom:2px solid rgba(0,0,0,.18);
+}
+.floor.c0{background:var(--lapis)} .floor.c1{background:var(--teal)} .floor.c2{background:var(--saffron)}
+.floor i{width:9px; height:13px; border-radius:5px 5px 0 0; background:rgba(255,255,255,.85)}
+.floor.c2 i{background:rgba(20,40,94,.8)}
+.floor.new{animation:drop .7s cubic-bezier(.3,1.5,.5,1)}
+@keyframes drop{from{transform:translateY(-120px);opacity:0} to{transform:none;opacity:1}}
+.ground{
+  width:calc(100% + 20px); height:34px; margin-top:0;
+  background:repeating-linear-gradient(90deg, var(--lapis) 0 18px, var(--teal) 18px 36px);
+  opacity:.9;
+}
+.cap{position:absolute; top:12px; inset-inline-start:14px; background:var(--surface); border:1px solid var(--line); border-radius:99px; padding:0 12px; font-size:14px; font-weight:700}
+.empty{color:var(--muted); text-align:center; padding:0 24px 18px; font-size:15px}
+
+.stats{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px}
+.stat{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:8px 6px; text-align:center}
+.stat b{display:block; font-size:22px; line-height:1.4}
+.stat small{color:var(--muted); font-size:12px}
+.tip{margin-top:12px; background:var(--surface); border-inline-start:5px solid var(--saffron); border-radius:10px; padding:10px 14px; font-size:15px}
+
+h2{font-size:20px; margin:8px 0 4px}
+p.sub{margin:0 0 12px; color:var(--muted); font-size:14px}
+
+.chips{display:flex; flex-wrap:wrap; gap:8px; margin:8px 0 14px}
+.chip{
+  border:1.5px solid var(--line); background:var(--surface); border-radius:99px; padding:2px 14px; font-weight:600;
+}
+.chip[aria-pressed="true"]{background:var(--lapis); border-color:var(--lapis); color:#fff}
+@media (prefers-color-scheme: dark){ .chip[aria-pressed="true"]{color:#0D1828} }
+.chip:disabled{opacity:.45; cursor:not-allowed}
+
+.btn{
+  background:var(--btn-bg); color:var(--btn-ink); border:0; border-radius:14px; padding:10px 22px; font-weight:800; width:100%;
+}
+.btn.alt{background:var(--saffron); color:var(--on-saffron)}
+.btn.ghost{background:transparent; color:var(--ink); border:1.5px solid var(--line)}
+.btn+.btn{margin-top:8px}
+
+/* timer */
+.ring{position:relative; width:230px; height:230px; margin:6px auto 16px}
+.ring svg{width:100%; height:100%; transform:rotate(-90deg)}
+.ring circle{fill:none; stroke-width:14}
+.ring .bg{stroke:var(--soft)}
+.ring .fg{stroke:var(--saffron); stroke-linecap:round; stroke-dasharray:553; stroke-dashoffset:0; transition:stroke-dashoffset .3s linear}
+.clock{position:absolute; inset:0; display:grid; place-items:center; font-size:46px; font-weight:800; direction:ltr}
+.clock small{display:block; font-size:13px; font-weight:500; color:var(--muted); text-align:center; direction:rtl; margin-top:-14px}
+
+/* battle */
+.hud{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; font-weight:700}
+.hearts{letter-spacing:3px; color:var(--coral)}
+.qcard{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:16px; margin-bottom:12px; min-height:110px; font-size:18px}
+.qtopic{display:inline-block; font-size:12px; background:var(--soft); border-radius:99px; padding:0 10px; color:var(--muted); margin-bottom:6px}
+.opts{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.opt{
+  background:var(--surface); border:2px solid var(--line); border-radius:14px; padding:12px 6px; font-size:19px; font-weight:700; min-height:56px;
+}
+.opt.right{border-color:var(--ok); background:color-mix(in srgb, var(--ok) 18%, var(--surface))}
+.opt.wrong{border-color:var(--coral); background:color-mix(in srgb, var(--coral) 16%, var(--surface))}
+.opt:disabled{cursor:default}
+.fb{margin:12px 0; padding:10px 14px; border-radius:12px; background:var(--soft); font-size:15px}
+.fb b.g{color:var(--ok)} .fb b.r{color:var(--coral)}
+.big{font-size:56px; text-align:center; line-height:1.2; margin:10px 0}
+
+/* quests */
+.add{display:flex; gap:8px}
+.add input{
+  flex:1; min-width:0; font-family:inherit; font-size:16px; padding:8px 12px; border-radius:12px;
+  border:1.5px solid var(--line); background:var(--surface); color:var(--ink);
+}
+.add .btn{width:auto; padding:8px 18px}
+.task{
+  display:flex; align-items:center; gap:10px; background:var(--surface); border:1px solid var(--line); border-radius:12px;
+  padding:8px 12px; margin-top:8px;
+}
+.task input{width:22px; height:22px; accent-color:var(--teal); flex:none}
+.task span{flex:1}
+.task.done span{text-decoration:line-through; color:var(--muted)}
+.task button{border:0; background:none; color:var(--muted); font-size:20px; line-height:1; padding:4px 8px}
+.none{color:var(--muted); text-align:center; padding:18px 0}
+
+/* nav */
+nav{
+  position:fixed; bottom:0; inset-inline:0; display:flex; justify-content:center; background:var(--surface);
+  border-top:1px solid var(--line); padding-bottom:env(safe-area-inset-bottom); z-index:5;
+}
+nav .in{display:flex; width:100%; max-width:480px}
+nav button{flex:1; border:0; background:none; padding:8px 0 6px; color:var(--muted); font-weight:600; font-size:13px; line-height:1.4}
+nav button b{display:block; font-size:22px; line-height:1.3}
+nav button[aria-selected="true"]{color:var(--lapis); box-shadow:inset 0 3px 0 var(--saffron)}
+@media (prefers-color-scheme: dark){ nav button[aria-selected="true"]{color:var(--saffron)} }
+
+.toast{
+  position:fixed; top:14px; left:50%; transform:translate(-50%,-90px); background:var(--ink); color:var(--bg);
+  padding:8px 18px; border-radius:99px; font-weight:700; z-index:20; transition:transform .35s; max-width:92vw; text-align:center; font-size:15px;
+}
+.toast.show{transform:translate(-50%,0)}
+.box{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:8px 12px; margin-top:10px}
+.box summary{cursor:pointer; font-weight:700}
+.box textarea{width:100%; margin:8px 0; font-family:ui-monospace,monospace; font-size:14px; padding:8px; border-radius:10px; border:1.5px solid var(--line); background:var(--bg); color:var(--ink)}
+.links{display:grid; gap:8px; margin-top:8px}
+.links a{display:block; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:8px 14px; color:var(--ink); text-decoration:none; font-weight:600}
+.links a:focus-visible{outline:3px solid var(--saffron); outline-offset:2px}
+nav button{font-size:12px !important}
+[hidden]{display:none !important}
+
+/* auth screen */
+.auth-screen{
+  position:fixed; inset:0; z-index:50; background:var(--bg);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:24px 20px; max-width:480px; margin:0 auto;
+  animation:fadeIn .4s ease;
+}
+.auth-screen .logo{
+  width:88px; height:88px; border-radius:22px; margin-bottom:16px;
+  background:conic-gradient(from 45deg, var(--lapis) 0 25%, var(--teal) 0 50%, var(--lapis) 0 75%, var(--teal) 0);
+  display:grid; place-items:center; color:#fff; font-size:36px; font-weight:800;
+  box-shadow:0 0 0 4px var(--saffron), 0 12px 32px rgba(29,58,138,.25);
+  animation:popIn .5s cubic-bezier(.3,1.4,.5,1);
+}
+.auth-screen h1{font-size:26px; margin:0 0 6px; text-align:center}
+.auth-screen .sub{text-align:center; margin-bottom:22px}
+.auth-screen input{
+  width:100%; font-family:inherit; font-size:16px; padding:12px 14px; border-radius:14px;
+  border:1.5px solid var(--line); background:var(--surface); color:var(--ink); margin-bottom:10px;
+}
+.auth-screen .btn{margin-top:6px}
+.auth-error{color:var(--coral); font-size:14px; text-align:center; min-height:20px; margin:4px 0}
+
+/* back button */
+.back-btn{
+  display:inline-flex; align-items:center; gap:6px;
+  background:transparent; border:1.5px solid var(--line); border-radius:99px;
+  padding:4px 14px 4px 10px; font-weight:700; font-size:14px; color:var(--ink);
+  margin-bottom:10px; cursor:pointer;
+  transition:background .2s, transform .15s;
+}
+.back-btn:active{transform:scale(.96)}
+.back-btn:hover{background:var(--soft)}
+
+/* improved animations */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes popIn{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes slideUp{from{transform:translateY(18px);opacity:0}to{transform:none;opacity:1}}
+@keyframes softPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+
+.section-anim{animation:slideUp .35s ease both}
+.chip,.opt,.btn,.task,.stat,.tip,.links a{
+  transition:transform .15s ease, background .2s, border-color .2s, box-shadow .2s;
+}
+.chip:active,.opt:active,.btn:active{transform:scale(.97)}
+.btn:hover{filter:brightness(1.05)}
+.opt:hover:not(:disabled){border-color:var(--lapis); box-shadow:0 2px 10px rgba(29,58,138,.12)}
+.stat{transition:transform .2s}
+.stat:hover{transform:translateY(-2px)}
+.badge{transition:transform .3s}
+.badge:hover{transform:rotate(8deg) scale(1.05)}
+
+/* card polish */
+.qcard,.sky,.stat,.task,.tip,.box,.links a{
+  box-shadow:0 1px 3px rgba(20,40,94,.04);
+}
+.qcard{animation:slideUp .3s ease}
+
+.back-btn{display:inline-flex;align-items:center;gap:6px;margin:4px 0 12px;padding:7px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);font-weight:700;color:var(--ink)}
+.teacher-select{width:100%;margin:8px 0;padding:12px;border-radius:12px;background:var(--surface);color:var(--ink);border:1px solid var(--line);font:inherit}.teacher-guide{margin-top:10px;padding:12px;border:1px solid var(--line);border-radius:14px;background:color-mix(in srgb,var(--surface) 88%, #8b7cff 12%)}.teacher-guide ol{padding-right:22px;line-height:1.9}.teacher-guide p{line-height:1.9}.teacher-intro{border-color:color-mix(in srgb,#9c8cff 45%,var(--line))}
+.game-card{background:linear-gradient(135deg,var(--surface),var(--soft));border:1px solid var(--line);border-radius:18px;padding:15px;margin:10px 0;box-shadow:0 8px 22px rgba(20,40,94,.07)}
+.shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.shop-item{background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:12px;text-align:center}.shop-item .emoji{font-size:30px}.coin{color:#b77908;font-weight:900}.reward{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--surface);padding:12px;border:1px solid var(--line);border-radius:13px;margin:8px 0}
+
+/* ===== Fantasy refresh: aurora glass + fluid motion ===== */
+:root{--bg:#0b1025;--surface:rgba(25,32,67,.78);--ink:#f4f2ff;--muted:#b8b8d6;--line:rgba(183,170,255,.23);--lapis:#9b8cff;--teal:#4de1d2;--saffron:#ffd36e;--coral:#ff829d;--ok:#69e5ad;--btn-bg:linear-gradient(120deg,#7668e8,#4c9ee8);--btn-ink:#fff;--soft:rgba(138,125,231,.15);--on-saffron:#251b4b}
+body{background:radial-gradient(ellipse at 10% 5%,rgba(93,75,191,.42),transparent 35%),radial-gradient(ellipse at 90% 20%,rgba(33,171,176,.22),transparent 32%),linear-gradient(145deg,#080d20,#111b39 55%,#171331);background-attachment:fixed;color:var(--ink)}
+body:before,body:after{content:"";position:fixed;z-index:-1;width:240px;height:240px;border-radius:50%;filter:blur(75px);opacity:.32;pointer-events:none;animation:floatGlow 12s ease-in-out infinite alternate}
+body:before{background:#7664ed;top:12%;left:-100px}body:after{background:#20c6b6;right:-110px;bottom:8%;animation-delay:-5s}
+@keyframes floatGlow{to{transform:translate(45px,-35px) scale(1.2)}}
+.app{max-width:760px;padding:18px 18px calc(112px + env(safe-area-inset-bottom))}
+.head{position:sticky;top:0;z-index:4;margin:-18px -18px 14px;padding:14px 18px;background:rgba(10,15,37,.72);backdrop-filter:blur(22px) saturate(150%);-webkit-backdrop-filter:blur(22px) saturate(150%);border-bottom:1px solid var(--line)}
+.badge,.auth-screen .logo{border-radius:19px;background:linear-gradient(145deg,#8b7cff,#26c5c1 55%,#f4bd65);box-shadow:0 0 0 1px rgba(255,255,255,.35),0 10px 35px rgba(109,91,232,.4)}
+.sky{min-height:400px;border-radius:28px;border:1px solid rgba(202,190,255,.28);background:linear-gradient(180deg,rgba(89,85,166,.34),rgba(24,36,75,.35)),radial-gradient(ellipse at 50% 15%,rgba(255,255,255,.13),transparent 50%);box-shadow:inset 0 1px rgba(255,255,255,.12),0 20px 55px rgba(0,0,0,.2);backdrop-filter:blur(12px)}
+.floor{box-shadow:0 6px 16px rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.22)}.ground{border-radius:12px 12px 0 0}
+.stat,.tip,.qcard,.task,.box,.links a,.game-card,.shop-item,.reward,.fb{background:linear-gradient(145deg,rgba(42,49,91,.82),rgba(22,31,65,.78));border:1px solid rgba(191,180,255,.2);box-shadow:0 12px 30px rgba(0,0,0,.16),inset 0 1px rgba(255,255,255,.06);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.stat{border-radius:18px;padding:12px 8px}.stat b{color:#fff;font-size:25px}.stat small,.sub,.xpline{color:var(--muted)!important}
+h2{font-size:23px;letter-spacing:-.3px}.btn{border-radius:15px;background:var(--btn-bg);box-shadow:0 8px 20px rgba(91,104,224,.24);transition:transform .22s,filter .22s,box-shadow .22s}.btn:hover{filter:brightness(1.13);box-shadow:0 12px 25px rgba(91,104,224,.32);transform:translateY(-2px)}.btn.alt{background:linear-gradient(120deg,#ffd36e,#ff9f75);color:#34234f}.btn.ghost{background:rgba(255,255,255,.06);box-shadow:none;color:var(--ink)}
+.chip{background:rgba(255,255,255,.06);color:var(--ink);border-color:var(--line);padding:6px 15px}.chip[aria-pressed="true"]{background:linear-gradient(120deg,#7668e8,#399fbd);border-color:transparent;box-shadow:0 6px 18px rgba(118,104,232,.3)}
+.opt{background:rgba(255,255,255,.055);color:var(--ink);border-color:var(--line);border-radius:16px}.opt.right{background:rgba(65,205,151,.16)}.opt.wrong{background:rgba(255,112,142,.15)}
+nav{background:rgba(9,14,34,.82);border-top:1px solid rgba(192,181,255,.2);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);overflow-x:auto;justify-content:flex-start;scrollbar-width:none}nav::-webkit-scrollbar{display:none}nav .in{max-width:760px;min-width:max-content;padding:0 8px}nav button{min-width:76px;padding:9px 7px 8px;color:#aaa9cc}nav button[aria-selected="true"]{color:#fff;background:linear-gradient(180deg,rgba(141,126,255,.18),transparent);box-shadow:inset 0 3px 0 #a99aff}
+.toast{background:#f4efff;color:#29204c;box-shadow:0 12px 32px rgba(0,0,0,.3)}.auth-screen{background:radial-gradient(ellipse at 50% 20%,rgba(119,101,229,.32),transparent 50%),linear-gradient(145deg,#080d20,#151b3d);color:var(--ink)}.auth-screen input{background:rgba(255,255,255,.08);border-color:var(--line);color:var(--ink)}
+.game-card{border-radius:21px;padding:17px}.shop-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.shop-item{border-radius:19px;position:relative;overflow:hidden;transition:transform .25s,border-color .25s}.shop-item:before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,.08),transparent 45%);pointer-events:none}.shop-item:hover{transform:translateY(-4px);border-color:rgba(180,165,255,.65)}.shop-item .emoji{font-size:38px;filter:drop-shadow(0 5px 8px rgba(0,0,0,.22));margin-bottom:4px}.shop-item .btn{padding:7px 10px;font-size:14px}.coin{color:#ffd36e}.reward{border-radius:15px}
+.back-btn{background:rgba(255,255,255,.07);border-color:var(--line);color:var(--ink);border-radius:13px}.ring .fg{stroke:#ffd36e;filter:drop-shadow(0 0 7px rgba(255,211,110,.5))}
+.leader-row{display:grid;grid-template-columns:38px 1fr auto;gap:10px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.045);margin:8px 0}.leader-row.me{border-color:#a99aff;background:rgba(139,124,255,.15)}.rank-medal{font-size:23px;text-align:center}.leader-name{font-weight:800}.leader-meta{font-size:12px;color:var(--muted)}.leader-xp{font-weight:900;color:#ffda83;white-space:nowrap}.leader-track{height:6px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden;margin-top:6px}.leader-track i{display:block;height:100%;background:linear-gradient(90deg,#8174ff,#4ed9c9);border-radius:99px}
+body[data-skin="aurora"]{--lapis:#7fe8dc;--btn-bg:linear-gradient(120deg,#168d9a,#6a75d8)}body[data-skin="sunset"]{--lapis:#ffad8e;--btn-bg:linear-gradient(120deg,#e66d91,#f3a34d)}body[data-skin="cosmos"]{--lapis:#b69aff;--btn-bg:linear-gradient(120deg,#6548bd,#a04dba)}body[data-skin="forest"]{--lapis:#9bdd9a;--btn-bg:linear-gradient(120deg,#398b68,#83a94c)}body[data-skin="ice"]{--lapis:#9de5ff;--btn-bg:linear-gradient(120deg,#438fc4,#6b7fe0)}
+@media(min-width:600px){.stats{gap:12px}.shop-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.sky{min-height:450px}}
+@media(max-width:380px){.app{padding-inline:12px}.shop-grid{gap:8px}.shop-item{padding:9px}.leader-row{grid-template-columns:30px 1fr auto;gap:7px}}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important; transition:none !important}
+}
+</style>
+</head>
+<body>
+
+<div class="auth-screen" id="authScreen" hidden>
+  <div class="logo">ب</div>
+  <h1>برج دانش</h1>
+  <p class="sub">برای هر نفر یک نام جدا بساز؛ پیشرفت هر پروفایل مستقل ذخیره می‌شود.</p>
+  <input id="authName" type="text" maxlength="24" placeholder="نام تو (مثلاً: آریا)" autocomplete="username">
+  <input id="authPin" type="password" maxlength="8" placeholder="رمز این پروفایل (اختیاری)" autocomplete="current-password">
+  <small class="sub" style="display:block;text-align:center">اطلاعات فقط در همین مرورگر و همین دستگاه ذخیره می‌شود؛ برای گوشی دوستت، پروفایل جدا ساخته می‌شود.</small>
+  <div class="auth-error" id="authErr"></div>
+  <button class="btn" id="authGo">ورود به برج</button>
+  <button class="btn ghost" id="authSkip" style="margin-top:8px">فقط مهمان (بدون ذخیره نام)</button>
+</div>
+
+<div class="app" id="mainApp" hidden>
+  <div class="head">
+    <div class="badge"><span id="lvNum">۱</span></div>
+    <div class="who">
+      <b id="title">نوآموز</b>
+      <div class="bar"><i id="xpBar"></i></div>
+      <div class="xpline" id="xpLine"></div>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <section id="tab-home">
+      <div class="sky">
+      <div class="cap" id="floorCap">۰ طبقه</div>
+      <div id="towerBox" style="display:flex;flex-direction:column;align-items:center"></div>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="stSess">۰</b><small>جلسه تمرکز</small></div>
+      <div class="stat"><b id="stMin">۰</b><small>دقیقه مطالعه</small></div>
+      <div class="stat"><b id="stOk">۰</b><small>پاسخ درست</small></div>
+    </div>
+    <div class="tip" id="tip"></div>
+    <button class="btn ghost" id="tipBtn" style="margin-top:10px">یه نکته‌ی دیگه</button>
+  </section>
+
+  <!-- FOCUS -->
+  <section id="tab-focus" hidden>
+    <button class="back-btn section-back" type="button">← برگشت به برج</button>
+    <h2>تمرکز</h2>
+    <p class="sub">گوشی رو کنار بذار و فقط درس بخون. وقتی تایمر تموم بشه، یه طبقه به برجت اضافه می‌شه.</p>
+    <div class="chips" id="durChips" role="group" aria-label="مدت تمرکز"></div>
+    <div class="ring">
+      <svg viewBox="0 0 200 200" aria-hidden="true"><circle class="bg" cx="100" cy="100" r="88"/><circle class="fg" id="fg" cx="100" cy="100" r="88"/></svg>
+      <div class="clock"><div id="clock">۲۵:۰۰</div></div>
+    </div>
+    <button class="btn" id="startBtn">شروع تمرکز</button>
+    <p class="sub" id="focusMsg" style="text-align:center;margin-top:12px"></p>
+  </section>
+
+  <!-- BATTLE -->
+  <section id="tab-battle" hidden>
+    <div id="battle"></div>
+  </section>
+
+  <!-- QUESTS -->
+  <section id="tab-quest" hidden>
+    <button class="back-btn section-back" type="button">← برگشت به برج</button>
+    <h2>ماموریت‌های امروز</h2>
+    <p class="sub">کارهای امروزت رو بنویس. هر کدوم رو که انجام دادی، ۱۵ امتیاز می‌گیری.</p>
+    <div class="add">
+      <input id="taskIn" type="text" maxlength="60" placeholder="مثلاً: ۱۰ تمرین دنباله" aria-label="ماموریت جدید">
+      <button class="btn" id="taskAdd">افزودن</button>
+    </div>
+    <div class="chips" id="sugg" style="margin-bottom:4px"></div>
+    <div id="tasks"></div>
+  </section>
+
+  <section id="tab-rewards" hidden>
+    <button class="back-btn section-back">← برگشت</button><h2>🎁 تالار پاداش‌ها</h2><p class="sub">با درس خواندن و انجام چالش‌ها سکه جمع کن و جایزه‌ی روزانه بگیر.</p>
+    <div class="game-card"><div style="font-size:38px">🎁</div><b>جایزه‌ی روزانه</b><p class="sub">هر روز یک بار جایزه‌ی تصادفی دریافت کن.</p><button class="btn alt" id="dailyReward">دریافت جایزه</button></div>
+    <div class="game-card"><b>🏅 دستاوردها</b><div id="achievements"></div></div>
+    <div class="game-card"><b>🧭 چالش‌های بازی</b><div id="gameChallenges"></div></div>
+  </section>
+  <section id="tab-shop" hidden>
+    <button class="back-btn section-back">← برگشت</button><h2>🛍️ فروشگاه برج</h2><p class="sub">ظاهر برج و تجربه‌ی بازی را با سکه‌های تمرین شخصی‌سازی کن.</p>
+    <div class="game-card">موجودی: <strong class="coin" id="coinBalance">۰ 🪙</strong></div><div class="shop-grid" id="shopItems"></div>
+  </section>
+  <section id="tab-mistakes" hidden>
+    <button class="back-btn section-back">← برگشت</button><h2>📒 دفترچه‌ی اشتباهات</h2><p class="sub">پاسخ‌های اشتباهت را با راه‌حل تشریحی، روش تستی و الگوی حلِ مدرس منتخب مرور کن.</p><div class="game-card teacher-intro"><b>🎓 روش حل بر اساس مدرس</b><p class="sub">برای هر سؤال، مدرس پیشنهادی درس را انتخاب کن. توضیح‌ها بر پایه‌ی راه‌حل سؤال و چارچوب‌های آموزشی همان درس مرتب می‌شوند؛ این قابلیت ادعای بازسازی دقیق کلاس یا جزوه‌ی مدرس نیست.</p></div><div id="mistakeList"></div>
+  </section>
+
+  <section id="tab-leaderboard" hidden>
+    <button class="back-btn section-back" type="button">← برگشت به برج</button>
+    <h2>🏆 تالار قهرمانان</h2><p class="sub">رتبه‌بندی بر اساس امتیاز تجربه (XP) بین پروفایل‌هایی که روی همین دستگاه ساخته شده‌اند.</p>
+    <div class="game-card"><div style="font-size:34px">🏆</div><b>رقابت دوستانه</b><p class="sub">هر جلسه تمرکز، پاسخ درست و مأموریت انجام‌شده تو را در جدول بالاتر می‌برد.</p><div id="leaderSummary"></div></div>
+    <div id="leaderboardList"></div>
+    <p class="sub">این جدول فعلاً محلی است؛ برای دیدن رتبه‌بندی مشترک همه‌ی کاربران در گوشی‌های مختلف، اتصال به سرور و حساب کاربری آنلاین لازم است.</p>
+  </section>
+
+  <!-- SOURCES -->
+  <section id="tab-src" hidden>
+    <button class="back-btn section-back" type="button">← برگشت به برج</button>
+    <h2>منابع و سوال‌های آنلاین</h2>
+    <p class="sub">وقتی به اینترنت وصلی، اپ بسته‌ی سوال‌های تازه رو می‌گیره و ذخیره می‌کنه تا آفلاین هم داشته باشیشون.</p>
+    <div class="fb" id="srcStatus"></div>
+    <button class="btn" id="pkRefresh">به‌روزرسانی سوال‌ها</button>
+    <details class="box"><summary>آدرس بسته‌های سوال (هر خط یکی)</summary>
+      <textarea id="urlsIn" rows="3" dir="ltr" aria-label="آدرس بسته‌های سوال"></textarea>
+      <button class="btn ghost" id="pkSave">ذخیره‌ی آدرس‌ها</button>
+    </details>
+    <details class="box"><summary>وارد کردن سوال (متن JSON)</summary>
+      <textarea id="impIn" rows="5" dir="ltr" placeholder='{"questions":[{"subject":"ریاضی","chapter":"فصل ۱ · دنباله","topic":"دنباله","q":"...","options":["الف","ب","ج","د"],"answer":0,"exp":"...","hard":true}]}' aria-label="متن JSON سوال‌ها"></textarea>
+      <button class="btn ghost" id="pkImport">وارد کردن</button>
+    </details>
+    <h2 style="margin-top:18px">منابع ایرانی (پایه دهم)</h2>
+    <div class="links">
+      <a href="https://gama.ir" target="_blank" rel="noopener">گاما — نمونه سوال و آزمون دهم</a>
+      <a href="https://www.heyvagroup.com" target="_blank" rel="noopener">هیوا — نمونه سوال امتحانی با پاسخ</a>
+      <a href="https://kanoon.ir" target="_blank" rel="noopener">کانون فرهنگی آموزش</a>
+      <a href="https://www.riazi100.ir" target="_blank" rel="noopener">ریاضی ۱۰۰ — درسنامه و تست</a>
+      <a href="https://www.filimo.school" target="_blank" rel="noopener">فیلیمو مدرسه — ویدیوهای آموزشی</a>
+      <a href="https://paadars.com" target="_blank" rel="noopener">پادرس — نمونه سؤال و جزوه</a>
+      <a href="https://nomreyar.com" target="_blank" rel="noopener">نمره‌یار — نمونه سؤال امتحانی</a>
+      <a href="https://azmoon.gama.ir" target="_blank" rel="noopener">آزمون گاما — آزمون‌های آنلاین</a>
+      <a href="https://www.daneshchi.ir" target="_blank" rel="noopener">دانش‌چی — جزوه و نمونه سؤال</a>
+      <a href="https://www.ketabkhan.org" target="_blank" rel="noopener">کتاب‌خوان — محتوای آموزشی</a>
+      <a href="https://www.ketabchi.org" target="_blank" rel="noopener">کتابچی — درسنامه و تست</a>
+      <a href="https://www.konkur.in" target="_blank" rel="noopener">کنکور — مجموعه آزمون و تست</a>
+      <a href="https://www.aparat.com" target="_blank" rel="noopener">آپارات — جستجوی تدریس فصل‌ها</a>
+      <a href="http://www.chap.sch.ir" target="_blank" rel="noopener">پایگاه کتاب‌های درسی رسمی</a>
+    </div>
+    <h2 style="margin-top:18px">منابع خارجی</h2>
+    <div class="links">
+      <a href="https://www.khanacademy.org" target="_blank" rel="noopener">Khan Academy — ریاضی، فیزیک، شیمی</a>
+      <a href="https://phet.colorado.edu" target="_blank" rel="noopener">PhET — شبیه‌ساز فیزیک و شیمی</a>
+      <a href="https://www.geogebra.org" target="_blank" rel="noopener">GeoGebra — هندسه و نمودار</a>
+      <a href="https://www.desmos.com/calculator" target="_blank" rel="noopener">Desmos — رسم تابع</a>
+      <a href="https://www.youtube.com/@OrganicChemistryTutor" target="_blank" rel="noopener">Organic Chemistry Tutor (انگلیسی)</a>
+    </div>
+    <p class="sub" style="margin-top:10px">هر نام کاربری روی همین دستگاه پروفایل، سکه، پیشرفت و اشتباهات جداگانه دارد. اطلاعات در حافظه‌ی مرورگر همین دستگاه می‌ماند و با نصب روی گوشی دوستت، داده‌ها خودکار منتقل نمی‌شوند. برای انتقال پیشرفت باید خروجی/ورودی پشتیبان اضافه شود.</p>
+    <p class="sub" style="margin-top:10px">این سایت‌ها در مرورگر باز می‌شوند. دریافت خودکار سؤال از هر سایتی به‌دلیل محدودیت‌های فنی و مجوز دسترسی (CORS) تضمین‌شدنی نیست؛ برای ورود مطمئن سؤال‌ها از بسته‌ی JSON یا بخش واردکردن سؤال استفاده کن.</p>
+  </section>
+
+</div>
+
+<nav><div class="in" role="tablist">
+  <button role="tab" data-tab="home" aria-selected="true"><b>🏰</b>برج</button>
+  <button role="tab" data-tab="focus" aria-selected="false"><b>⏳</b>تمرکز</button>
+  <button role="tab" data-tab="battle" aria-selected="false"><b>⚔️</b>نبرد</button>
+  <button role="tab" data-tab="quest" aria-selected="false"><b>✅</b>ماموریت</button>
+  <button role="tab" data-tab="src" aria-selected="false"><b>📚</b>منابع</button>
+  <button role="tab" data-tab="rewards" aria-selected="false"><b>🎁</b>پاداش</button><button role="tab" data-tab="shop" aria-selected="false"><b>🛍️</b>فروشگاه</button><button role="tab" data-tab="mistakes" aria-selected="false"><b>📒</b>اشتباهات</button><button role="tab" data-tab="leaderboard" aria-selected="false"><b>🏆</b>رده‌بندی</button>
+</div></nav>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const fa = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+const M = s => `<span class="m" dir="ltr">${fa(s)}</span>`;
+const neg = n => n < 0 ? '−' + (-n) : '' + n;
+const rnd = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = rnd(0, i); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+/* ---------- پروفایل‌های مستقل روی همین دستگاه ---------- */
+const DEFAULT_STATE = { xp:0, coins:0, sessions:0, minutes:0, correct:0, tasks:[], mistakes:[], owned:[], equipped:'default', dailyClaim:'', name:'', pin:'' };
+const S = {...DEFAULT_STATE};
+let activeProfile = '';
+let profiles = {};
+try { profiles = JSON.parse(localStorage.getItem('borj-profiles') || '{}') || {}; } catch(e) { profiles = {}; }
+// مهاجرت خودکار ذخیره‌ی نسخه‌های قبلی به پروفایل قدیمی
+try { const legacy = JSON.parse(localStorage.getItem('borj-save') || 'null'); if (legacy && legacy.name && !profiles[profileKey(legacy.name)]) profiles[profileKey(legacy.name)] = legacy; } catch(e) {}
+function profileKey(name) { return String(name || 'مهمان').trim().toLocaleLowerCase('fa-IR').replace(/\s+/g,' '); }
+function save() {
+  try {
+    if (!activeProfile) return;
+    profiles[activeProfile] = {...S};
+    localStorage.setItem('borj-profiles', JSON.stringify(profiles));
+    localStorage.setItem('borj-active-profile', activeProfile);
+  } catch(e) { toast('فضای ذخیره‌سازی دستگاه پر شده است.'); }
+}
+function loadProfile(name) {
+  activeProfile = profileKey(name);
+  const data = profiles[activeProfile] || DEFAULT_STATE;
+  Object.keys(S).forEach(k => delete S[k]);
+  Object.assign(S, DEFAULT_STATE, data, {name:String(name || 'مهمان').trim()});
+  save();
+}
+const TITLES = ['نوآموز','شاگرد کوشا','حل‌کننده‌ی مسئله','شکارچی فرمول','دوست خوارزمی','استاد استدلال','هم‌قدم میرزاخانی','اسطوره‌ی ریاضی'];
+const level = () => Math.floor(S.xp / 100) + 1;
+const floorsCount = () => Math.floor(S.xp / 40);
+const title = () => TITLES[Math.min(level() - 1, TITLES.length - 1)];
+
+let toastTimer;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function addXP(n) {
+  const l0 = level(), f0 = floorsCount();
+  S.xp += n; S.coins = (S.coins || 0) + Math.max(1, Math.floor(n / 2)); save();
+  renderHead(); renderTower(f0); renderStats();
+  if (!$('#tab-leaderboard').hidden) renderLeaderboard();
+  if (level() > l0) toast(`سطح ${fa(level())}! حالا «${title()}» هستی 🎉`);
+}
+
+function renderHead() {
+  $('#lvNum').textContent = fa(level());
+  $('#title').textContent = S.name || title();
+  const p = S.xp % 100;
+  $('#xpBar').style.width = p + '%';
+  $('#xpLine').textContent = `${fa(p)} از ${fa(100)} امتیاز تا سطح بعد`;
+}
+function renderStats() {
+  save();
+  $('#stSess').textContent = fa(S.sessions);
+  $('#stMin').textContent = fa(S.minutes);
+  $('#stOk').textContent = fa(S.correct);
+}
+function renderTower(prev) {
+  const f = floorsCount(), show = Math.min(f, 12);
+  let h = '<div class="flag" aria-hidden="true">⚑</div><div class="floors">';
+  for (let i = 0; i < show; i++) {
+    const num = f - i, w = 70 + i * 14;
+    const isNew = i === 0 && prev !== undefined && f > prev;
+    h += `<div class="floor c${num % 3}${isNew ? ' new' : ''}" style="width:${w}px"><i></i><i></i><i></i></div>`;
+  }
+  h += '</div><div class="ground"></div>';
+  if (f === 0) h += '<div class="empty">برجت هنوز خالیه. با تمرکز یا حل مسئله اولین طبقه رو بساز.</div>';
+  $('#towerBox').innerHTML = h;
+  $('#floorCap').textContent = `${fa(f)} طبقه`;
+}
+
+/* ---------- tips ---------- */
+const TIPS = [
+  'بیست‌وپنج دقیقه تمرکز کامل بهتر از دو ساعت درس خوندن با گوشی کنار دسته.',
+  'بعد از هر مبحث، بدون نگاه کردن به کتاب، فرمول‌هاش رو روی کاغذ بنویس. این بهترین مرور فعاله.',
+  'اشتباه‌هات رو تو یه دفترچه‌ی کوچیک جمع کن. قبل از امتحان فقط همون رو مرور کن.',
+  'یه مسئله‌ی سخت رو نیم ساعت حل نکردی؟ راه‌حلش رو ببین، بعد فردا دوباره خودت حلش کن.',
+  'مرور بعد از ۱ روز، ۳ روز و ۱ هفته باعث می‌شه مطلب واقعاً تو ذهنت بمونه.',
+  'ریاضی با دیدن حل‌شده یاد گرفته نمی‌شه. قلم دستت بگیر و خودت حل کن.',
+  'خوابِ کافی جزو درس خوندنه. مغز شب‌ها چیزایی که خوندی رو تثبیت می‌کنه.',
+  'هدفت رو کوچیک کن: امروز فقط یه مبحث. برج هم طبقه‌به‌طبقه ساخته می‌شه.',
+  'قبل از شروع، گوشی رو تو اتاق دیگه بذار. فقط دیدنش تمرکز رو کم می‌کنه.',
+  'وقتی فرمولی رو حفظ می‌کنی، از خودت بپرس: از کجا اومده؟ فهمیدنش حفظش رو آسون می‌کنه.'
+];
+let tipIdx = rnd(0, TIPS.length - 1);
+function showTip() { $('#tip').textContent = TIPS[tipIdx]; }
+$('#tipBtn').onclick = () => { tipIdx = (tipIdx + 1) % TIPS.length; showTip(); };
+
+/* ---------- tabs ---------- */
+document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('nav button').forEach(x => x.setAttribute('aria-selected', x === b));
+  ['home', 'focus', 'battle', 'quest', 'src', 'rewards', 'shop', 'mistakes', 'leaderboard'].forEach(t => {
+    const el = $('#tab-' + t);
+    const show = t === b.dataset.tab;
+    el.hidden = !show;
+    if (show) { el.classList.remove('section-anim'); void el.offsetWidth; el.classList.add('section-anim'); }
+  });
+  if (b.dataset.tab === 'shop') renderShop(); if (b.dataset.tab === 'rewards') renderRewards(); if (b.dataset.tab === 'mistakes') renderMistakes(); if (b.dataset.tab === 'leaderboard') renderLeaderboard();
+  window.scrollTo(0, 0);
+});
+document.querySelectorAll('.section-back').forEach(b=>b.onclick=()=>document.querySelector('nav [data-tab=home]').click());
+
+/* ---------- focus timer ---------- */
+const DURS = [[1, '۱ دقیقه (تست)'], [15, '۱۵ دقیقه'], [25, '۲۵ دقیقه'], [45, '۴۵ دقیقه']];
+const T = { dur: 25, end: 0, run: false, id: null };
+const C = 553;
+function renderDur() {
+  $('#durChips').innerHTML = DURS.map(([d, l]) =>
+    `<button class="chip" data-d="${d}" aria-pressed="${T.dur === d}" ${T.run ? 'disabled' : ''}>${l}</button>`).join('');
+  document.querySelectorAll('#durChips .chip').forEach(c => c.onclick = () => {
+    T.dur = +c.dataset.d; renderDur(); drawClock(T.dur * 60);
+  });
+}
+function clockText(sec) {
+  const m = Math.floor(sec / 60), s = sec % 60;
+  return fa(String(m).padStart(2, '0')) + ':' + fa(String(s).padStart(2, '0'));
+}
+function drawClock(rem) {
+  $('#clock').textContent = clockText(rem);
+  const total = T.dur * 60;
+  $('#fg').style.strokeDashoffset = T.run ? C * (1 - (total - rem) / total) : 0;
+}
+function tick() {
+  if (!T.run) return;
+  const rem = Math.max(0, Math.ceil((T.end - Date.now()) / 1000));
+  drawClock(rem);
+  if (rem <= 0) finishFocus();
+}
+function finishFocus() {
+  clearInterval(T.id); T.run = false;
+  const gain = T.dur * 3;
+  S.sessions++; S.minutes += T.dur;
+  $('#startBtn').textContent = 'شروع تمرکز';
+  $('#startBtn').classList.remove('ghost');
+  $('#focusMsg').textContent = `آفرین! ${fa(T.dur)} دقیقه تمرکز کردی و ${fa(gain)} امتیاز گرفتی.`;
+  renderDur(); drawClock(T.dur * 60);
+  addXP(gain);
+  toast(`+${fa(gain)} امتیاز. برجت بلندتر شد 🏰`);
+}
+$('#startBtn').onclick = () => {
+  if (T.run) {
+    clearInterval(T.id); T.run = false;
+    $('#startBtn').textContent = 'شروع تمرکز'; $('#startBtn').classList.remove('ghost');
+    $('#focusMsg').textContent = 'اشکالی نداره. وقتی آماده بودی دوباره شروع کن.';
+    renderDur(); drawClock(T.dur * 60); return;
+  }
+  T.run = true; T.end = Date.now() + T.dur * 60000;
+  T.id = setInterval(tick, 250);
+  $('#startBtn').textContent = 'انصراف'; $('#startBtn').classList.add('ghost');
+  $('#focusMsg').textContent = 'تمرکز کن. فقط درس.';
+  renderDur(); tick();
+};
+document.addEventListener('visibilitychange', tick);
+
+/* ---------- question generators ---------- */
+function finish(topic, q, ans, exp, st = 1, pos = false) {
+  const set = new Set([ans]);
+  for (const c of shuffle([ans + st, ans - st, ans + 2 * st, ans - 2 * st, ans + 3 * st, ans - 3 * st, -ans, ans * 2, ans + 10 * st, ans - 10 * st])) {
+    if (set.size >= 4) break; if (pos && c <= 0) continue; set.add(c);
+  }
+  let guard = 0; while (set.size < 4 && guard++ < 50) set.add(ans + rnd(4, 15) * st);
+  const opts = shuffle([...set]).map(v => ({ t: neg(v), ok: v === ans }));
+  return { topic, q, opts, exp, testExp: 'روش تستی: ابتدا داده‌ها و خواسته را جدا کن؛ گزینه‌های ناسازگار را حذف کن و فرمول مرتبط را مستقیم به‌کار ببر.' };
+}
+function fixed(topic, q, a, w, exp) {
+  return { topic, q, exp, testExp: 'روش تستی: به کلمه‌ی کلیدی سؤال توجه کن و گزینه‌ها را با تعریف یا رابطه‌ی اصلی مقایسه کن.', opts: shuffle([{ t: a, ok: true }, ...w.map(t => ({ t, ok: false }))]) };
+}
+function poly(S_, P) {
+  let s = 'x² ';
+  if (S_ !== 0) s += (S_ > 0 ? '− ' : '+ ') + (Math.abs(S_) === 1 ? '' : Math.abs(S_)) + 'x ';
+  if (P !== 0) s += (P > 0 ? '+ ' : '− ') + Math.abs(P) + ' ';
+  return s + '= 0';
+}
+const GEN = {
+  'دنباله': [
+    () => { const a = rnd(2, 9), d = rnd(2, 7), n = rnd(6, 12);
+      return finish('دنباله', `جمله‌ی ${fa(n)}ام دنباله‌ی حسابی با جمله‌ی اول ${fa(a)} و قدرنسبت ${fa(d)} کدام است؟`, a + (n - 1) * d,
+        `جمله‌ی nام = جمله‌ی اول + (n − 1) × قدرنسبت = ${fa(a)} + ${fa(n - 1)} × ${fa(d)} = ${fa(a + (n - 1) * d)}`); },
+    () => { const a = rnd(1, 4), r = rnd(2, 3), n = rnd(4, 5), v = a * Math.pow(r, n - 1);
+      return finish('دنباله', `جمله‌ی ${fa(n)}ام دنباله‌ی هندسی با جمله‌ی اول ${fa(a)} و قدرنسبت ${fa(r)} کدام است؟`, v,
+        `جمله‌ی nام = جمله‌ی اول × قدرنسبت<sup>n−1</sup> = ${fa(a)} × ${fa(r)}<sup>${fa(n - 1)}</sup> = ${fa(v)}`); }
+  ],
+  'معادله': [
+    () => { let x = rnd(-6, 9); if (x === 0) x = 4; const a = rnd(2, 7); let b = rnd(-9, 9); if (b === 0) b = 3; const c = a * x + b;
+      return finish('معادله', `جواب معادله‌ی ${M(`${a}x ${b > 0 ? '+' : '−'} ${Math.abs(b)} = ${neg(c)}`)} کدام است؟`, x,
+        `اول ${fa(Math.abs(b))} رو به طرف دیگه ببر: ${M(`${a}x = ${neg(c - b)}`)} و بعد تقسیم بر ${fa(a)}.`); },
+    () => { let p = rnd(-5, 6), q = rnd(-5, 6); if (p === q) q = p + 2;
+      const big = Math.max(p, q), e = poly(p + q, p * q);
+      return finish('معادله', `ریشه‌ی بزرگ‌تر معادله‌ی ${M(e)} کدام است؟`, big,
+        `دنبال دو عددی بگرد که مجموعشون ${fa(neg(p + q))} و حاصل‌ضربشون ${fa(neg(p * q))} باشه: ${fa(neg(p))} و ${fa(neg(q))}.`); }
+  ],
+  'توان و ریشه': [
+    () => { const b = pick([2, 3]), x = rnd(2, 4), y = rnd(1, 3);
+      return finish('توان و ریشه', `مقدار ${M(`${b}<sup>${x}</sup> × ${b}<sup>${y}</sup>`)} کدام است؟`, Math.pow(b, x + y),
+        `وقتی پایه‌ها برابرن، توان‌ها جمع می‌شن: ${M(`${b}<sup>${x + y}</sup>`)} = ${fa(Math.pow(b, x + y))}`); },
+    () => { const [a, b] = pick([[2, 8], [3, 12], [5, 20], [2, 18], [3, 27], [2, 32], [7, 28]]), v = Math.round(Math.sqrt(a * b));
+      return finish('توان و ریشه', `مقدار ${M(`√${a} × √${b}`)} کدام است؟`, v,
+        `${M(`√${a} × √${b}`)} = ${M(`√${a * b}`)} = ${fa(v)}`); }
+  ],
+  'مثلثات': [
+    null,
+    () => { const [a, b, c] = pick([[3, 4, 5], [5, 12, 13], [8, 15, 17], [6, 8, 10]]);
+      return finish('مثلثات', `در مثلث قائم‌الزاویه‌ای دو ضلع ${fa(a)} و ${fa(b)} است. وتر چند است؟`, c,
+        `فیثاغورس: ${M(`√(${a}² + ${b}²)`)} = ${M(`√${a * a + b * b}`)} = ${fa(c)}`); }
+  ],
+  'مجموعه': [
+    () => { const a = rnd(8, 20), b = rnd(6, 18), i = rnd(2, 5), v = a + b - i;
+      return finish('مجموعه', `اگر ${M(`n(A) = ${a}`)} و ${M(`n(B) = ${b}`)} و ${M(`n(A∩B) = ${i}`)} باشد، ${M('n(A∪B)')} چند است؟`, v,
+        `n(A∪B) = n(A) + n(B) − n(A∩B) = ${fa(a)} + ${fa(b)} − ${fa(i)} = ${fa(v)}`); }
+  ],
+  'تابع': [
+    () => { const a = rnd(2, 5); let b = rnd(-5, 6); if (b === 0) b = 2; const k = rnd(-3, 5), v = a * k + b;
+      return finish('تابع', `اگر ${M(`f(x) = ${a}x ${b > 0 ? '+' : '−'} ${Math.abs(b)}`)} باشد، ${M(`f(${neg(k)})`)} کدام است؟`, v,
+        `به جای x عدد ${fa(neg(k))} رو بذار: ${fa(a)} × (${fa(neg(k))}) ${b > 0 ? '+' : '−'} ${fa(Math.abs(b))} = ${fa(neg(v))}`); },
+    () => { const a = rnd(1, 3); let b = rnd(-6, 6); if (b === 0) b = 1; const k = rnd(-3, 4), v = a * k * k + b;
+      return finish('تابع', `اگر ${M(`f(x) = ${a === 1 ? '' : a}x² ${b > 0 ? '+' : '−'} ${Math.abs(b)}`)} باشد، ${M(`f(${neg(k)})`)} کدام است؟`, v,
+        `اول ${fa(neg(k))} رو به توان ۲ برسون (مثبت می‌شه)، بعد ضرب و جمع کن: ${fa(neg(v))}`); }
+  ],
+  'قدر مطلق': [
+    () => { const x = rnd(1, 9), y = rnd(1, 9), z = rnd(1, 9), v = Math.abs(x - y) + z;
+      return finish('قدر مطلق', `مقدار ${M(`|${x} − ${y}| + |−${z}|`)} کدام است؟`, v,
+        `قدر مطلق همیشه مثبته: ${fa(Math.abs(x - y))} + ${fa(z)} = ${fa(v)}`); },
+    () => { const a = rnd(1, 8), b = rnd(1, 5);
+      return finish('قدر مطلق', `مجموع جواب‌های معادله‌ی ${M(`|x − ${a}| = ${b}`)} کدام است؟`, 2 * a,
+        `جواب‌ها ${fa(a + b)} و ${fa(a - b)} هستن (${fa(a)} ± ${fa(b)}) و مجموعشون ${fa(2 * a)} می‌شه.`); }
+  ]
+};
+// trig preset list lives in the first entry; make it a real generator
+GEN['مثلثات'][0] = () => pick([
+  fixed('مثلثات', `مقدار ${M('sin 30° + cos 60°')} کدام است؟`, M('1'), ['1/2', '√3', '0'].map(x => M(x)), 'sin 30° = ۱/۲ و cos 60° = ۱/۲ پس جمعشون ۱ می‌شه.'),
+  fixed('مثلثات', `مقدار ${M('cos 30°')} کدام است؟`, M('√3/2'), ['1/2', '√2/2', '√3/3'].map(x => M(x)), 'cos 30° = √3/2 (برعکس sin 30° = ۱/۲).'),
+  fixed('مثلثات', `مقدار ${M('tan 30°')} کدام است؟`, M('√3/3'), ['√3', '1/2', '1'].map(x => M(x)), 'tan 30° = sin 30° ÷ cos 30° = (۱/۲) ÷ (√3/2) = √3/3'),
+  fixed('مثلثات', `مقدار ${M('sin 45° × cos 45°')} کدام است؟`, M('1/2'), ['1', '√2/2', '√2'].map(x => M(x)), 'هر دو √2/2 هستن و ضربشون ۲/۴ = ۱/۲ می‌شه.'),
+  fixed('مثلثات', `مقدار ${M('tan 45° × sin 90°')} کدام است؟`, M('1'), ['0', '√2/2', '2'].map(x => M(x)), 'tan 45° = ۱ و sin 90° = ۱'),
+  fixed('مثلثات', `مقدار ${M('cos 90° + sin 90°')} کدام است؟`, M('1'), ['0', '2', '−1'].map(x => M(x)), 'cos 90° = ۰ و sin 90° = ۱')
+]);
+
+GEN['فیزیک'] = [
+  () => { const r = rnd(2, 9), V = rnd(5, 20), m = r * V;
+    return finish('فیزیک', `جرم جسمی ${fa(m)} گرم و حجمش ${fa(V)} سانتی‌متر مکعب است. چگالی آن چند گرم بر سانتی‌متر مکعب است؟`, r,
+      `چگالی = جرم ÷ حجم = ${fa(m)} ÷ ${fa(V)} = ${fa(r)}`, 1, true); },
+  () => { const v = rnd(3, 15), t = rnd(4, 12);
+    return finish('فیزیک', `خودرویی با تندی ثابت ${fa(v)} متر بر ثانیه، ${fa(t)} ثانیه حرکت می‌کند. چند متر جابه‌جا می‌شود؟`, v * t,
+      `مسافت = تندی × زمان = ${fa(v)} × ${fa(t)} = ${fa(v * t)}`, v, true); },
+  () => { const F = rnd(5, 40), d = rnd(2, 10);
+    return finish('فیزیک', `نیروی ${fa(F)} نیوتونی جسمی را ${fa(d)} متر در راستای نیرو جابه‌جا می‌کند. کار این نیرو چند ژول است؟`, F * d,
+      `کار = نیرو × جابه‌جایی = ${fa(F)} × ${fa(d)} = ${fa(F * d)} ژول`, F, true); },
+  () => { const m = rnd(2, 10) * 2, v = rnd(2, 10);
+    return finish('فیزیک', `جسمی به جرم ${fa(m)} کیلوگرم با تندی ${fa(v)} متر بر ثانیه حرکت می‌کند. انرژی جنبشی آن چند ژول است؟`, m * v * v / 2,
+      `انرژی جنبشی = ½ × جرم × تندی² = ½ × ${fa(m)} × ${fa(v * v)} = ${fa(m * v * v / 2)}`, v, true); },
+  () => { const A = rnd(2, 10), P = rnd(3, 20), F = A * P;
+    return finish('فیزیک', `نیروی ${fa(F)} نیوتون عمود بر سطحی به مساحت ${fa(A)} متر مربع وارد می‌شود. فشار چند پاسکال است؟`, P,
+      `فشار = نیرو ÷ مساحت = ${fa(F)} ÷ ${fa(A)} = ${fa(P)}`, 1, true); },
+  () => { const m = rnd(2, 10), h = rnd(2, 10);
+    return finish('فیزیک', `انرژی پتانسیل گرانشی جسمی ${fa(m)} کیلوگرمی در ارتفاع ${fa(h)} متری چند ژول است؟ (g = ${fa(10)})`, m * 10 * h,
+      `U = m × g × h = ${fa(m)} × ${fa(10)} × ${fa(h)} = ${fa(m * 10 * h)}`, 10, true); },
+  () => { const c = rnd(0, 60);
+    return finish('فیزیک', `دمای ${fa(c)} درجه‌ی سلسیوس چند کلوین است؟`, c + 273,
+      `دمای کلوین = دمای سلسیوس + ۲۷۳ = ${fa(c)} + ${fa(273)} = ${fa(c + 273)}`, 10, true); },
+  () => { const P = rnd(5, 50), t = rnd(2, 10);
+    return finish('فیزیک', `کاری برابر ${fa(P * t)} ژول در ${fa(t)} ثانیه انجام می‌شود. توان چند وات است؟`, P,
+      `توان = کار ÷ زمان = ${fa(P * t)} ÷ ${fa(t)} = ${fa(P)}`, 1, true); }
+];
+GEN['شیمی'] = [
+  () => { const [Z, A, n] = pick([[6, 12, 'کربن'], [8, 16, 'اکسیژن'], [11, 23, 'سدیم'], [17, 35, 'کلر'], [20, 40, 'کلسیم'], [26, 56, 'آهن'], [13, 27, 'آلومینیم'], [12, 24, 'منیزیم']]).map((x, i) => x);
+    const nm = [6, 12, 'کربن'];
+    return null; },
+  () => { const [sym, name, Z, ch] = pick([['Na⁺', 'سدیم', 11, 1], ['Cl⁻', 'کلر', 17, -1], ['Mg²⁺', 'منیزیم', 12, 2], ['O²⁻', 'اکسیژن', 8, -2], ['Al³⁺', 'آلومینیم', 13, 3], ['F⁻', 'فلوئور', 9, -1]]);
+    const e = Z - ch;
+    return finish('شیمی', `یون ${M(sym)} (عدد اتمی ${name}: ${fa(Z)}) چند الکترون دارد؟`, e,
+      `اتم خنثی ${fa(Z)} الکترون دارد. بار یون ${fa(ch > 0 ? '+' + ch : '−' + (-ch))} است، پس تعداد الکترون‌ها = ${fa(Z)} ${ch > 0 ? '−' : '+'} ${fa(Math.abs(ch))} = ${fa(e)}`, 1, true); },
+  () => { const [f, mm] = pick([['H₂O', 18], ['CO₂', 44], ['NH₃', 17], ['CH₄', 16], ['NaOH', 40], ['CaO', 56], ['H₂SO₄', 98], ['CaCO₃', 100], ['MgO', 40]]);
+    return finish('شیمی', `جرم مولی ${M(f)} چند گرم بر مول است؟ (H=1, C=12, N=14, O=16, Na=23, Mg=24, S=32, Ca=40)`, mm,
+      `جرم اتم‌های موجود در فرمول رو با توجه به تعدادشون جمع کن: ${fa(mm)}`, 2, true); },
+  () => { const [nm, f, mm] = pick([['آب', 'H₂O', 18], ['کربن دی‌اکسید', 'CO₂', 44], ['سدیم هیدروکسید', 'NaOH', 40], ['متان', 'CH₄', 16]]);
+    const n = rnd(2, 6), g = mm * n;
+    return finish('شیمی', `${fa(g)} گرم ${nm} (${M(f)}) چند مول است؟ (جرم مولی = ${fa(mm)} گرم بر مول)`, n,
+      `مول = جرم ÷ جرم مولی = ${fa(g)} ÷ ${fa(mm)} = ${fa(n)}`, 1, true); },
+  () => { const [Z, g] = pick([[11, 1], [12, 2], [17, 17], [9, 17], [19, 1], [20, 2], [8, 16], [16, 16], [13, 13]]);
+    return finish('شیمی', `عنصری با عدد اتمی ${fa(Z)} در کدام گروه جدول تناوبی قرار دارد؟`, g,
+      `آرایش الکترونی رو بنویس. تعداد الکترون‌های لایه‌ی آخر، گروه رو مشخص می‌کنه (گروه‌های ۱، ۲ و ۱۳ تا ۱۸).`, 1, true); }
+];
+GEN['شیمی'][0] = () => { const [Z, A, nm] = pick([[6, 12, 'کربن'], [8, 16, 'اکسیژن'], [11, 23, 'سدیم'], [17, 35, 'کلر'], [20, 40, 'کلسیم'], [26, 56, 'آهن'], [13, 27, 'آلومینیم'], [12, 24, 'منیزیم']]);
+  return finish('شیمی', `اتم ${nm} عدد اتمی ${fa(Z)} و عدد جرمی ${fa(A)} دارد. چند نوترون دارد؟`, A - Z,
+    `تعداد نوترون = عدد جرمی − عدد اتمی = ${fa(A)} − ${fa(Z)} = ${fa(A - Z)}`, 1, true); };
+GEN['هندسه'] = [
+  () => { const n = rnd(5, 10);
+    return finish('هندسه', `مجموع زاویه‌های داخلی چندضلعی ${fa(n)}ضلعی چند درجه است؟`, (n - 2) * 180,
+      `مجموع = (n − ۲) × ۱۸۰ = ${fa(n - 2)} × ${fa(180)} = ${fa((n - 2) * 180)}`, 180, true); },
+  () => { const n = pick([5, 6, 8, 9, 10, 12]), v = (n - 2) * 180 / n;
+    return finish('هندسه', `هر زاویه‌ی داخلی چندضلعی منتظم ${fa(n)}ضلعی چند درجه است؟`, v,
+      `(n − ۲) × ۱۸۰ ÷ n = ${fa(n - 2)} × ${fa(180)} ÷ ${fa(n)} = ${fa(v)}`, 6, true); },
+  () => { const n = rnd(5, 12), v = n * (n - 3) / 2;
+    return finish('هندسه', `یک چندضلعی ${fa(n)}ضلعی چند قطر دارد؟`, v,
+      `تعداد قطرها = n(n − ۳) ÷ ۲ = ${fa(n)} × ${fa(n - 3)} ÷ ۲ = ${fa(v)}`, 2, true); },
+  () => { const a = rnd(2, 5); let b = rnd(2, 6); if (b === a) b++; const m = rnd(2, 4);
+    return finish('هندسه', `در مثلث ABC خط DE با BC موازی است (D روی AB و E روی AC). اگر AD = ${fa(a)} و DB = ${fa(b)} و AE = ${fa(a * m)} باشد، EC چند است؟`, b * m,
+      `قضیه‌ی تالس: AD/DB = AE/EC، پس EC = AE × DB ÷ AD = ${fa(a * m)} × ${fa(b)} ÷ ${fa(a)} = ${fa(b * m)}`, 1, true); },
+  () => { const k = rnd(2, 4), A = rnd(2, 9);
+    return finish('هندسه', `دو مثلث متشابه نسبت تشابه ${fa(k)} دارند. اگر مساحت مثلث کوچک‌تر ${fa(A)} باشد، مساحت مثلث بزرگ‌تر چند است؟`, A * k * k,
+      `نسبت مساحت‌ها مجذور نسبت تشابهه: ${fa(A)} × ${fa(k * k)} = ${fa(A * k * k)}`, A, true); },
+  () => { const b = rnd(2, 10) * 2, h = rnd(3, 9);
+    return finish('هندسه', `مساحت مثلثی با قاعده‌ی ${fa(b)} و ارتفاع نظیر آن ${fa(h)} چند است؟`, b * h / 2,
+      `مساحت = ½ × قاعده × ارتفاع = ½ × ${fa(b)} × ${fa(h)} = ${fa(b * h / 2)}`, 2, true); },
+  () => { const a = rnd(3, 9), b = a + 2 * rnd(1, 4), h = rnd(2, 8), v = (a + b) * h / 2;
+    return finish('هندسه', `مساحت ذوزنقه‌ای با قاعده‌های ${fa(a)} و ${fa(b)} و ارتفاع ${fa(h)} چند است؟`, v,
+      `مساحت = (مجموع قاعده‌ها) × ارتفاع ÷ ۲ = ${fa(a + b)} × ${fa(h)} ÷ ۲ = ${fa(v)}`, 2, true); },
+  () => { const r = rnd(3, 9);
+    return fixed('هندسه', `مساحت دایره‌ای به شعاع ${fa(r)} کدام است؟`, M(`${r * r}π`), [`${2 * r}π`, `${2 * r * r}π`, `${r}π`].map(x => M(x)),
+      `مساحت دایره = π r² = π × ${fa(r)}² = ${fa(r * r)}π`); },
+  () => { const k = rnd(1, 3), [a, b, c] = pick([[3, 4, 5], [5, 12, 13]]);
+    return finish('هندسه', `طول و عرض مستطیلی ${fa(a * k)} و ${fa(b * k)} است. قطر مستطیل چند است؟`, c * k,
+      `با فیثاغورس: √(${fa(a * k)}² + ${fa(b * k)}²) = ${fa(c * k)}`, 1, true); }
+];
+
+/* ---------- challenge (hard) generators ---------- */
+function pterm(c, v, first) {
+  if (c === 0) return '';
+  const a = Math.abs(c), co = (a === 1 && v) ? '' : a, sg = c < 0 ? '−' : (first ? '' : '+');
+  return first ? sg + co + v : ' ' + sg + ' ' + co + v;
+}
+const HARD = {};
+HARD['دنباله'] = [
+  () => { const a1 = rnd(-3, 8), d = rnd(2, 6), p = rnd(3, 5), q = rnd(8, 11), n = rnd(14, 20);
+    const X = a1 + (p - 1) * d, Y = a1 + (q - 1) * d, v = a1 + (n - 1) * d;
+    return finish('دنباله', `در یک دنباله‌ی حسابی، جمله‌ی ${fa(p)}ام برابر ${fa(neg(X))} و جمله‌ی ${fa(q)}ام برابر ${fa(neg(Y))} است. جمله‌ی ${fa(n)}ام کدام است؟`, v,
+      `قدرنسبت = اختلاف دو جمله ÷ فاصله‌ی شماره‌هاشون = ${fa(d)}. از جمله‌ی ${fa(q)}ام به بعد ${fa(n - q)} بار ${fa(d)} اضافه کن: ${fa(neg(v))}`, d); },
+  () => { const n = pick([8, 10, 12, 14]), a = rnd(1, 9), d = rnd(2, 5), S_ = n * (2 * a + (n - 1) * d) / 2;
+    return finish('دنباله', `مجموع ${fa(n)} جمله‌ی اول دنباله‌ی حسابی با جمله‌ی اول ${fa(a)} و قدرنسبت ${fa(d)} کدام است؟`, S_,
+      `S = n(۲a + (n−۱)d) ÷ ۲ = ${fa(n)} × ${fa(2 * a + (n - 1) * d)} ÷ ۲ = ${fa(S_)}`, n, true); },
+  () => { const a = rnd(1, 3), r = pick([2, 3]), s = a * r + a * r * r + a * r * r * r;
+    return finish('دنباله', `بین ${fa(a)} و ${fa(a * Math.pow(r, 4))} سه واسطه‌ی هندسی (با قدرنسبت مثبت) درج می‌کنیم. مجموع این سه واسطه چند است؟`, s,
+      `قدرنسبت ${fa(r)} می‌شه و واسطه‌ها ${fa(a * r)}، ${fa(a * r * r)} و ${fa(a * r * r * r)} هستن.`, a * r, true); }
+];
+HARD['معادله'] = [
+  () => { const a = rnd(2, 3); let p = rnd(-4, 5), q = rnd(-4, 5); if (p === q) q = p + 3;
+    const e = pterm(a, 'x²', true) + pterm(-a * (p + q), 'x', false) + pterm(a * p * q, '', false) + ' = 0';
+    return finish('معادله', `ریشه‌ی بزرگ‌تر معادله‌ی ${M(e)} کدام است؟`, Math.max(p, q),
+      `همه‌ی جمله‌ها رو بر ${fa(a)} تقسیم کن تا ${M(poly(p + q, p * q))} بشه. ریشه‌ها ${fa(neg(p))} و ${fa(neg(q))} هستن.`); },
+  () => { let p = rnd(-4, 5), q = rnd(-4, 5); if (p === q) q = p + 2;
+    const S_ = p + q, P = p * q, v = p * p + q * q;
+    return finish('معادله', `مجموع مربع‌های ریشه‌های معادله‌ی ${M(poly(S_, P))} چند است؟`, v,
+      `(مجموع ریشه‌ها)² − ۲ × (حاصل‌ضرب ریشه‌ها) = ${fa(S_ * S_)} − (${fa(neg(2 * P))}) = ${fa(v)}`, 2, true); },
+  () => { const x = rnd(2, 9), y = rnd(1, 8), s = x + y, d = x - y;
+    return finish('معادله', `اگر ${M(`x + y = ${s}`)} و ${M(`x − y = ${neg(d)}`)} باشد، حاصل‌ضرب xy چند است؟`, x * y,
+      `دو معادله رو جمع کن: ${M(`2x = ${s + d}`)} پس x = ${fa(x)} و y = ${fa(y)}.`, 2, true); }
+];
+HARD['توان و ریشه'] = [
+  () => { const a = rnd(2, 4), b = rnd(2, 3), c = rnd(1, a * b - 1), v = Math.pow(2, a * b - c);
+    return finish('توان و ریشه', `مقدار ${M(`(2<sup>${a}</sup>)<sup>${b}</sup> ÷ 2<sup>${c}</sup>`)} کدام است؟`, v,
+      `توان‌ها در هم ضرب می‌شن (${fa(a * b)}) و در تقسیم از هم کم می‌شن: ${M(`2<sup>${a * b - c}</sup>`)} = ${fa(v)}`, Math.max(2, v / 2), true); },
+  () => { const k1 = rnd(1, 3), k2 = rnd(k1 + 1, 5), m = pick([2, 3, 5]);
+    return fixed('توان و ریشه', `حاصل ${M(`√${k1 * k1 * m} + √${k2 * k2 * m}`)} را ساده کنید.`, M(`${k1 + k2}√${m}`),
+      [`${k1 * k2}√${m}`, `${k1 + k2}√${2 * m}`, `${k1 * k1 + k2 * k2}√${m}`].map(x => M(x)),
+      `هر رادیکال رو ساده کن: ${M(`${k1}√${m}`)} + ${M(`${k2}√${m}`)} = ${M(`${k1 + k2}√${m}`)}`); },
+  () => { const [a, b] = pick([[2, 8], [3, 12], [5, 20], [2, 18], [3, 27]]), v = a + b + 2 * Math.round(Math.sqrt(a * b));
+    return finish('توان و ریشه', `مقدار ${M(`(√${a} + √${b})²`)} کدام است؟`, v,
+      `اتحاد: ${M(`a + b + 2√(ab)`)} = ${fa(a)} + ${fa(b)} + ${fa(2)} × ${fa(Math.round(Math.sqrt(a * b)))} = ${fa(v)}`, 2, true); }
+];
+HARD['مثلثات'] = [
+  () => { const [a, b, c] = pick([[3, 4, 5], [5, 12, 13], [8, 15, 17]]);
+    return fixed('مثلثات', `اگر ${M(`sin α = ${a}/${c}`)} و α زاویه‌ی حاده باشد، ${M('tan α')} کدام است؟`, M(`${a}/${b}`),
+      [`${b}/${a}`, `${a}/${c}`, `${b}/${c}`].map(x => M(x)),
+      `cos α = ${fa(b)}/${fa(c)} (با فیثاغورس)، پس tan α = sin α ÷ cos α = ${fa(a)}/${fa(b)}`); },
+  () => pick([
+    [4, '3/2', ['1/2', '5/4', '2']], [5, '7/5', ['2/5', '6/5', '1']], [8, '5/4', ['1/4', '9/8', '1']], [10, '6/5', ['1/5', '11/10', '1']]
+  ].map(([k, a, w]) => () => fixed('مثلثات', `اگر ${M(`sin x · cos x = 1/${k}`)} باشد، ${M('(sin x + cos x)²')} کدام است؟`, M(a), w.map(x => M(x)),
+      `باز کن: sin²x + cos²x + ۲ sin x cos x = ۱ + ۲ × ۱/${fa(k)} = ${fa(a)}`)))(),
+  () => { const [e, a, w] = pick([
+      ['sin 150°', '1/2', ['−1/2', '√3/2', '1']], ['cos 120°', '−1/2', ['1/2', '√3/2', '−√3/2']], ['tan 135°', '−1', ['1', '−√3', '√3']],
+      ['sin 210°', '−1/2', ['1/2', '−√3/2', '√3/2']], ['cos 300°', '1/2', ['−1/2', '√3/2', '−√3/2']], ['tan 120°', '−√3', ['√3', '−√3/3', '−1']]]);
+    return fixed('مثلثات', `مقدار ${M(e)} کدام است؟`, M(a), w.map(x => M(x)),
+      'زاویه‌ی مرجع (فاصله تا محور افقی) رو پیدا کن و علامت رو از ربعی که زاویه توش افتاده بگیر.'); }
+];
+HARD['مجموعه'] = [
+  () => { const n = rnd(36, 45), a = rnd(12, 20), b = rnd(10, 18), c = rnd(3, 8), v = n - (a + b - c);
+    return finish('مجموعه', `در کلاسی با ${fa(n)} نفر، ${fa(a)} نفر فوتبال، ${fa(b)} نفر والیبال و ${fa(c)} نفر هر دو ورزش را بازی می‌کنند. چند نفر هیچ‌کدام را بازی نمی‌کنند؟`, v,
+      `کسانی که حداقل یکی رو بازی می‌کنن: ${fa(a)} + ${fa(b)} − ${fa(c)} = ${fa(a + b - c)}. بقیه: ${fa(n)} − ${fa(a + b - c)} = ${fa(v)}`, 2, true); },
+  () => { const n = rnd(4, 7), v = Math.pow(2, n) - 1;
+    return finish('مجموعه', `یک مجموعه‌ی ${fa(n)} عضوی چند زیرمجموعه‌ی سره دارد؟`, v,
+      `تعداد کل زیرمجموعه‌ها ${M(`2<sup>${n}</sup>`)} = ${fa(Math.pow(2, n))} است. زیرمجموعه‌ی سره یعنی خود مجموعه رو کم کن: ${fa(v)}`, Math.pow(2, n - 2), true); },
+  () => { const u = rnd(15, 30), b = rnd(5, 14);
+    return finish('مجموعه', `اگر ${M(`n(A∪B) = ${u}`)} و ${M(`n(B) = ${b}`)} باشد، ${M('n(A−B)')} چند است؟`, u - b,
+      `A−B یعنی عضوهایی که فقط تو A هستن: n(A∪B) − n(B) = ${fa(u)} − ${fa(b)} = ${fa(u - b)}`, 2, true); }
+];
+HARD['تابع'] = [
+  () => { let a = rnd(-4, 5); if (a === 0) a = 3; const b = rnd(-6, 8), r = rnd(5, 7);
+    return finish('تابع', `f یک تابع خطی است با ${M(`f(1) = ${neg(a + b)}`)} و ${M(`f(3) = ${neg(3 * a + b)}`)}. مقدار ${M(`f(${r})`)} کدام است؟`, a * r + b,
+      `شیب = (${fa(neg(3 * a + b))} − ${fa(neg(a + b))}) ÷ ۲ = ${fa(neg(a))}. بعد از ۳ تا ${fa(r)}، ${fa(r - 3)} واحد جلو برو و ${fa(neg(a))} بار اضافه کن.`, 2); },
+  () => { const a = rnd(2, 4); let b = rnd(-5, 5); if (b === 0) b = 2; const c = rnd(-3, 4), k = rnd(-3, 3), v = a * (k * k + c) + b;
+    return finish('تابع', `اگر ${M(`f(x) = ${a}x ${b > 0 ? '+' : '−'} ${Math.abs(b)}`)} و ${M(`g(x) = x² ${c >= 0 ? '+' : '−'} ${Math.abs(c)}`)} باشد، ${M(`f(g(${neg(k)}))`)} کدام است؟`, v,
+      `اول g(${fa(neg(k))}) = ${fa(neg(k * k + c))} رو حساب کن، بعد اون رو تو f بذار: ${fa(neg(v))}`, 3); }
+];
+HARD['قدر مطلق'] = [
+  () => { let b = rnd(-8, 8); if (b === 0) b = 4; const c = rnd(1, 9);
+    return finish('قدر مطلق', `مجموع جواب‌های معادله‌ی ${M(`|2x ${b > 0 ? '+' : '−'} ${Math.abs(b)}| = ${c}`)} کدام است؟`, -b,
+      `۲x ${b > 0 ? '+' : '−'} ${fa(Math.abs(b))} می‌تونه ${fa(c)} یا −${fa(c)} باشه. جواب‌ها ${M(`(${neg(-b + c)})/2`)} و ${M(`(${neg(-b - c)})/2`)} هستن و مجموعشون ${fa(neg(-b))} می‌شه.`, 2); },
+  () => { const a = rnd(1, 8); let b = rnd(1, 9); if (b === a) b += 3;
+    return finish('قدر مطلق', `کم‌ترین مقدار ${M(`|x − ${a}| + |x − ${b}|`)} چند است؟`, Math.abs(a - b),
+      `مجموع فاصله‌ی x از دو عدد ${fa(a)} و ${fa(b)} وقتی کمینه‌ست که x بینشون باشه: ${fa(Math.abs(a - b))}`, 2, true); },
+  () => { const a = rnd(1, 6), b = rnd(2, 7);
+    return finish('قدر مطلق', `نامعادله‌ی ${M(`|x − ${neg(a)}| &lt; ${b}`)} چند جواب صحیح دارد؟`, 2 * b - 1,
+      `x باید بین ${fa(neg(a - b))} و ${fa(neg(a + b))} باشه (بدون خود این دو عدد): ${fa(2 * b - 1)} عدد صحیح.`, 2, true); }
+];
+HARD['فیزیک'] = [
+  () => { const h = rnd(2, 9);
+    return finish('فیزیک', `فشار ناشی از ستونی از آب (چگالی ${fa(1000)} کیلوگرم بر متر مکعب) به ارتفاع ${fa(h)} متر چند کیلوپاسکال است؟ (g = ${fa(10)})`, 10 * h,
+      `P = ρgh = ${fa(1000)} × ${fa(10)} × ${fa(h)} = ${fa(10000 * h)} پاسکال = ${fa(10 * h)} کیلوپاسکال`, 10, true); },
+  () => { const m = 2 * rnd(1, 4), v = rnd(2, 9), W = m * v * v / 2;
+    return finish('فیزیک', `جسمی ${fa(m)} کیلوگرمی از حال سکون شروع به حرکت می‌کند و کار کل نیروهای وارد بر آن ${fa(W)} ژول می‌شود. تندی نهایی چند متر بر ثانیه است؟`, v,
+      `کار = تغییر انرژی جنبشی: ${fa(W)} = ½ × ${fa(m)} × v² پس v² = ${fa(v * v)} و v = ${fa(v)}`, 1, true); },
+  () => { const m = rnd(2, 10) * 10, c = rnd(2, 5), t = rnd(5, 20), Q = m * c * t;
+    return finish('فیزیک', `گرمای لازم برای بالا بردن دمای ${fa(m)} گرم ماده‌ای با گرمای ویژه‌ی ${fa(c)} ژول بر گرم‌درجه، به اندازه‌ی ${fa(t)} درجه‌ی سلسیوس چند ژول است؟`, Q,
+      `Q = m c Δθ = ${fa(m)} × ${fa(c)} × ${fa(t)} = ${fa(Q)}`, c * t, true); },
+  () => { const a = rnd(10, 40), b = a + 2 * rnd(5, 20);
+    return finish('فیزیک', `دو مقدار هم‌جرم آب با دمای ${fa(a)} و ${fa(b)} درجه‌ی سلسیوس را مخلوط می‌کنیم (بدون اتلاف گرما). دمای تعادل چند درجه است؟`, (a + b) / 2,
+      `جرم‌ها برابرن، پس دمای تعادل میانگین دو دماست: (${fa(a)} + ${fa(b)}) ÷ ۲ = ${fa((a + b) / 2)}`, 2, true); },
+  () => { const P = rnd(2, 10) * 100, e = pick([20, 40, 50, 60, 80]);
+    return finish('فیزیک', `موتوری با توان مصرفی ${fa(P)} وات، بازده ${fa(e)} درصد دارد. توان مفید آن چند وات است؟`, P * e / 100,
+      `توان مفید = توان مصرفی × بازده = ${fa(P)} × ${fa(e)}/${fa(100)} = ${fa(P * e / 100)}`, P / 10, true); }
+];
+HARD['شیمی'] = [
+  () => { const [f, el, cnt] = pick([['H₂SO₄', 'O', 4], ['CaCO₃', 'O', 3], ['C₂H₆', 'H', 6], ['NH₃', 'H', 3], ['CO₂', 'O', 2], ['Na₂CO₃', 'Na', 2]]), n = rnd(2, 5);
+    return finish('شیمی', `در ${fa(n)} مول ${M(f)} چند مول اتم ${M(el)} وجود دارد؟`, n * cnt,
+      `در هر مولکول ${fa(cnt)} اتم ${el} هست، پس ${fa(n)} × ${fa(cnt)} = ${fa(n * cnt)} مول`, cnt, true); },
+  () => { const [f, el, v] = pick([['MgO', 'Mg', 60], ['CaCO₃', 'Ca', 40], ['CH₄', 'C', 75], ['SO₂', 'S', 50], ['CaCO₃', 'O', 48]]);
+    return finish('شیمی', `درصد جرمی عنصر ${M(el)} در ${M(f)} چقدر است؟ (H=1, C=12, O=16, Mg=24, S=32, Ca=40)`, v,
+      `درصد جرمی = (جرم عنصر در یک مول ÷ جرم مولی ترکیب) × ۱۰۰ = ${fa(v)}٪`, 5, true); },
+  () => { const [sym, A, Z, ch] = pick([['Mg²⁺', 24, 12, 2], ['Cl⁻', 35, 17, -1], ['Ca²⁺', 40, 20, 2], ['O²⁻', 16, 8, -2], ['Na⁺', 23, 11, 1], ['Al³⁺', 27, 13, 3]]);
+    const e = Z - ch, n = A - Z;
+    return finish('شیمی', `برای یون ${M(sym)} با عدد جرمی ${fa(A)} و عدد اتمی ${fa(Z)}، مجموع تعداد الکترون‌ها و نوترون‌ها چند است؟`, e + n,
+      `الکترون‌ها: ${fa(Z)} ${ch > 0 ? '−' : '+'} ${fa(Math.abs(ch))} = ${fa(e)}. نوترون‌ها: ${fa(A)} − ${fa(Z)} = ${fa(n)}. مجموع: ${fa(e + n)}`, 2, true); },
+  () => { const n = rnd(2, 6);
+    return finish('شیمی', `در واکنش ${M('2H₂ + O₂ → 2H₂O')}، اگر ${fa(n)} مول گاز هیدروژن با اکسیژن کافی واکنش دهد، چند گرم آب تولید می‌شود؟ (H₂O = ${fa(18)} گرم بر مول)`, n * 18,
+      `نسبت مولی H₂ به H₂O برابر ۱ به ۱ است، پس ${fa(n)} مول آب: ${fa(n)} × ${fa(18)} = ${fa(n * 18)} گرم`, 18, true); }
+];
+HARD['هندسه'] = [
+  () => { const [X, n] = pick([[108, 5], [120, 6], [135, 8], [140, 9], [144, 10], [150, 12]]);
+    return finish('هندسه', `هر زاویه‌ی داخلی یک چندضلعی منتظم ${fa(X)} درجه است. این چندضلعی چند ضلع دارد؟`, n,
+      `زاویه‌ی خارجی = ${fa(180)} − ${fa(X)} = ${fa(180 - X)} و مجموع زاویه‌های خارجی ${fa(360)} است: ${fa(360)} ÷ ${fa(180 - X)} = ${fa(n)}`, 1, true); },
+  () => { const x = rnd(2, 9), d = rnd(1, 4), m = rnd(2, 3);
+    return finish('هندسه', `در مثلث ABC خط DE موازی BC است (D روی AB و E روی AC). اگر DB = AD + ${fa(d)} و AE = ${fa(x * m)} و EC = ${fa((x + d) * m)} باشد، AD چند است؟`, x,
+      `طبق تالس AD/DB = AE/EC. اگر AD = x باشد: x × ${fa((x + d) * m)} = ${fa(x * m)} × (x + ${fa(d)}) که جوابش x = ${fa(x)} می‌شه.`, 1, true); },
+  () => { const [a, b, c, h] = pick([[15, 20, 25, 12], [30, 40, 50, 24], [45, 60, 75, 36], [60, 80, 100, 48]]);
+    return finish('هندسه', `در مثلث قائم‌الزاویه‌ای ضلع‌های قائم ${fa(a)} و ${fa(b)} و وتر ${fa(c)} است. ارتفاع وارد بر وتر چند است؟`, h,
+      `مساحت را دو جور بنویس: ½ × ${fa(a)} × ${fa(b)} = ½ × ${fa(c)} × h پس h = ${fa(a * b)} ÷ ${fa(c)} = ${fa(h)}`, 2, true); },
+  () => { const n = rnd(6, 12), sum = (n - 2) * 180, v = n * (n - 3) / 2;
+    return finish('هندسه', `مجموع زاویه‌های داخلی یک چندضلعی ${fa(sum)} درجه است. این چندضلعی چند قطر دارد؟`, v,
+      `n = ${fa(sum)} ÷ ${fa(180)} + ۲ = ${fa(n)}. قطرها: n(n − ۳) ÷ ۲ = ${fa(v)}`, 2, true); }
+];
+GEN['زبان'] = [
+  () => fixed('زبان','معنی واژه‌ی انگلیسیِ «careful» کدام است؟','مراقب',['سریع','خسته','شاد'],'careful یعنی مراقب یا با دقت. روش تستی: آن را با care (مراقبت) به خاطر بسپار.'),
+  () => { const subj = pick([['She','goes'],['He','plays'],['My brother','studies'],['Sara','watches']]); const wrong = pick(['go','going','gone']); return fixed('زبان',`گزینه‌ی درست را انتخاب کن: ${subj[0]} ___ to school every day.`,subj[1],[wrong,'is go','have go'],'در زمان حال ساده، فاعل سوم‌شخص مفرد فعل s یا es می‌گیرد.'); },
+  () => fixed('زبان','متضادِ «easy» کدام است؟','difficult',['early','empty','friendly'],'easy یعنی آسان و متضاد آن difficult یعنی دشوار است.'),
+  () => { const year = pick([2018,2019,2020,2021,2022,2023]); return fixed('زبان',`جای خالی را کامل کن: I have lived here ___ ${year}.`,'since',['for','during','from'],'برای نقطه‌ی شروع زمان از since استفاده می‌کنیم؛ برای مدت زمان از for.'); },
+  () => { const word = pick([['beautiful','زیبا'],['ancient','باستانی'],['dangerous','خطرناک'],['usually','معمولاً'],['environment','محیط زیست'],['journey','سفر']]); return fixed('زبان',`معنی واژه‌ی «${word[0]}» چیست؟`,word[1],['پنجره','فراموش کردن','بلند'],`معنی واژه ${word[0]} برابر ${word[1]} است.`); },
+  () => { const v = pick([['They','are'],['I','am'],['We','are'],['You','are']]); return fixed('زبان',`گزینه‌ی درست را انتخاب کن: ${v[0]} ___ students.`,v[1],['is','be','was'],'فعل to be را با فاعل هماهنگ کن: I با am و جمع با are می‌آید.'); },
+  () => { const pairs = [['child','children'],['man','men'],['woman','women'],['foot','feet'],['tooth','teeth']]; const p = pick(pairs); return fixed('زبان',`شکل جمع واژه‌ی «${p[0]}» کدام است؟`,p[1],['childs','childes','childrens'],'این اسم جمع بی‌قاعده دارد و باید شکل ویژه‌ی آن را حفظ کرد.'); },
+  () => { const v = pick([['yesterday','went'],['last week','visited'],['two days ago','studied'],['in 2020','started']]); return fixed('زبان',`جای خالی را کامل کن: We ___ our teacher ${v[0]}.`,v[1],['go','going','gone'],'قید زمان گذشته نشان می‌دهد که باید از شکل گذشته‌ی فعل استفاده کنیم.'); },
+  () => fixed('زبان','کدام گزینه حرف اضافه‌ی مناسب است؟ The book is ___ the table.','on',['at','between','from'],'برای قرار داشتن چیزی روی سطح از on استفاده می‌کنیم.'),
+  () => fixed('زبان','کدام ضمیر برای جایگزینی «Ali and Reza» مناسب است؟','They',['He','She','It'],'برای دو یا چند نفر از ضمیر جمع They استفاده می‌کنیم.')
+];
+const TOPICS = Object.keys(GEN);
+
+/* ساختار درس → فصل مطابق کتاب درسی پایه دهم */
+const SUBJECTS = {
+  'ریاضی': {
+    icon: '📐',
+    chapters: {
+      'فصل ۱ · مجموعه، الگو و دنباله': ['مجموعه', 'دنباله'],
+      'فصل ۲ · مثلثات': ['مثلثات'],
+      'فصل ۳ · توان‌های گویا و عبارت‌های جبری': ['توان و ریشه'],
+      'فصل ۴ · معادله‌ها و نامعادله‌ها': ['معادله', 'قدر مطلق'],
+      'فصل ۵ · تابع': ['تابع'],
+      'فصل ۶ · شمارش بدون شمردن': ['مجموعه'],
+      'فصل ۷ · آمار و احتمال': ['مجموعه']
+    }
+  },
+  'هندسه': {
+    icon: '📏',
+    chapters: {
+      'فصل ۱ · ترسیم‌های هندسی و استدلال': ['هندسه'],
+      'فصل ۲ · قضیه تالس و تشابه': ['هندسه'],
+      'فصل ۳ · چندضلعی‌ها': ['هندسه'],
+      'فصل ۴ · تجسم فضایی': ['هندسه']
+    }
+  },
+  'فیزیک': {
+    icon: '⚡',
+    chapters: {
+      'فصل ۱ · فیزیک و اندازه‌گیری': ['فیزیک'],
+      'فصل ۲ · ویژگی‌های فیزیکی مواد': ['فیزیک'],
+      'فصل ۳ · کار، انرژی و توان': ['فیزیک'],
+      'فصل ۴ · دما و گرما': ['فیزیک']
+    }
+  },
+  'شیمی': {
+    icon: '🧪',
+    chapters: {
+      'فصل ۱ · کیهان زادگاه الفبای هستی': ['شیمی'],
+      'فصل ۲ · ردپای گازها در زندگی': ['شیمی'],
+      'فصل ۳ · آب، آهنگ زندگی': ['شیمی']
+    }
+  },
+  'زبان': {
+    icon: '🔤',
+    chapters: {
+      'درس‌های عمومی و واژگان': ['زبان'],
+      'گرامر پایه': ['زبان'],
+      'درک مطلب و کلوز': ['زبان']
+    }
+  }
+};
+
+
+function backBar(label, fn) {
+  return `<button class="back-btn" id="backBtn" type="button">→ ${label || 'برگشت'}</button>`;
+}
+
+/* ---------- battle ---------- */
+const B = { hard: false, online: false, subject: 'all', chapter: 'all', topic: 'all', n: 0, total: 10, hearts: 3, combo: 0, right: 0, earned: 0, cur: null, locked: false, batch: [], batchMode: false };
+const PRAISE = ['عالی بود!', 'دقیقاً همینه!', 'آفرین، ادامه بده!', 'درسته، مغزت داغه!', 'محشر!'];
+const COMFORT = ['اشکال نداره، اشتباه یعنی داری یاد می‌گیری.', 'این یکی رو دفعه‌ی بعد می‌زنی.', 'راه‌حل رو بخون تا برای همیشه یاد بگیری.'];
+
+function getTopicsForFilter() {
+  if (B.subject === 'all') return TOPICS;
+  const sub = SUBJECTS[B.subject];
+  if (!sub) return TOPICS;
+  if (B.chapter === 'all') return [...new Set(Object.values(sub.chapters).flat())].filter(t => GEN[t]);
+  return (sub.chapters[B.chapter] || []).filter(t => GEN[t]);
+}
+
+
+function bindBattleBack(toMenu) {
+  const b = $('#backBtn');
+  if (!b) return;
+  b.onclick = () => {
+    if (toMenu) battleMenu();
+    else {
+      // go home tab
+      document.querySelectorAll('nav button').forEach(x => x.setAttribute('aria-selected', 'false'));
+      const homeBtn = document.querySelector('nav button[data-tab="home"]');
+      if (homeBtn) { homeBtn.setAttribute('aria-selected', 'true'); }
+      ['home','focus','battle','quest','src'].forEach(t => {
+        const el = $('#tab-' + t);
+        if (el) el.hidden = t !== 'home';
+      });
+    }
+  };
+}
+
+function battleMenu() {
+  const np = packAll().length;
+  const subjectsHtml = `
+    <button class="chip" data-s="all" aria-pressed="${B.subject === 'all'}">همه‌ی درس‌ها</button>
+    ${Object.keys(SUBJECTS).map(s => `<button class="chip" data-s="${s}" aria-pressed="${B.subject === s}">${SUBJECTS[s].icon} ${s}</button>`).join('')}`;
+
+  let chaptersHtml = '';
+  if (B.subject !== 'all' && SUBJECTS[B.subject]) {
+    const chs = SUBJECTS[B.subject].chapters;
+    chaptersHtml = `
+      <p class="sub" style="margin:10px 0 4px">انتخاب فصل:</p>
+      <div class="chips" role="group" aria-label="فصل">
+        <button class="chip" data-c="all" aria-pressed="${B.chapter === 'all'}">همه‌ی فصل‌ها</button>
+        ${Object.keys(chs).map(c => `<button class="chip" data-c="${c}" aria-pressed="${B.chapter === c}">${c}</button>`).join('')}
+      </div>`;
+  }
+
+  const selectedLabel = B.subject === 'all'
+    ? 'همه‌ی درس‌ها'
+    : (B.chapter === 'all' ? B.subject : `${B.subject} ← ${B.chapter}`);
+
+  $('#battle').innerHTML = `
+    ${backBar('برگشت به منو', () => {})}
+    <h2>نبرد</h2>
+    <p class="sub">در حالت عادی ۱۰ سؤال داری؛ یا برای درس انتخابی، یک بسته‌ی ۲۰ سؤالی تازه بساز و تمرین کن. هر پاسخ درست امتیاز می‌دهد.</p>
+    <p class="sub" style="margin-bottom:6px"><b>انتخاب درس:</b></p>
+    <div class="chips" role="group" aria-label="درس">
+      ${subjectsHtml}
+    </div>
+    ${chaptersHtml}
+    <div class="fb" style="margin:12px 0 8px;font-size:14px">📚 تست انتخاب‌شده: <b>${selectedLabel}</b></div>
+    <div class="chips" role="group" aria-label="حالت‌ها">
+      <button class="chip" id="tgHard" aria-pressed="${B.hard}">🔥 حالت چالشی (امتیاز دو برابر)</button>
+      <button class="chip" id="tgOnline" aria-pressed="${B.online}" ${np ? '' : 'disabled'}>🌐 سوال‌های آنلاین (${fa(np)})</button>
+    </div>
+    <button class="btn alt" id="goBattle">شروع نبرد ۱۰ سؤالی</button>
+    <button class="btn" id="get20" ${B.subject === 'all' ? 'disabled' : ''}>✨ ساخت ۲۰ سؤال تازه برای ${B.subject === 'all' ? 'درس انتخابی' : B.subject}</button>
+    <p class="sub" style="font-size:12px">سؤال‌های تازه با مولد داخلی برنامه ساخته می‌شوند و برای ساختشان اینترنت لازم نیست. انتخاب فصل، بسته را محدودتر می‌کند.</p>`;
+
+  document.querySelectorAll('#battle [data-s]').forEach(c => c.onclick = () => {
+    B.subject = c.dataset.s;
+    B.chapter = 'all';
+    B.topic = 'all';
+    battleMenu();
+  });
+  document.querySelectorAll('#battle [data-c]').forEach(c => c.onclick = () => {
+    B.chapter = c.dataset.c;
+    B.topic = 'all';
+    battleMenu();
+  });
+  $('#tgHard').onclick = () => { B.hard = !B.hard; battleMenu(); };
+  $('#tgOnline').onclick = () => { B.online = !B.online; battleMenu(); };
+  $('#goBattle').onclick = () => { B.batchMode = false; B.batch = []; B.total = 10; startBattle(); };
+  const get20 = $('#get20');
+  if (get20) get20.onclick = startFreshBatch;
+  bindBattleBack(false);
+}
+function startBattle() {
+  if (B.batchMode) {
+    if (!B.batch.length) B.batch = buildFreshBatch();
+    B.total = 20;
+  } else { B.total = 10; }
+  Object.assign(B, { n: 0, hearts: 3, combo: 0, right: 0, earned: 0 });
+  nextQ();
+}
+function buildFreshBatch() {
+  const allowed = getTopicsForFilter();
+  const topics = (allowed || []).filter(t => GEN[t] && GEN[t].length);
+  if (!topics.length) return [];
+  const batch = [], seen = new Set();
+  let attempts = 0;
+  while (batch.length < 20 && attempts++ < 1200) {
+    const topic = pick(topics);
+    const source = (B.hard && HARD[topic] && HARD[topic].length) ? HARD[topic] : GEN[topic];
+    if (!source || !source.length) continue;
+    const q = pick(source)();
+    if (!q || !q.q) continue;
+    const key = String(q.q).replace(/\s+/g, ' ').trim();
+    if (seen.has(key)) continue;
+    seen.add(key); q.subject = B.subject; q.topic = q.topic || topic;
+    batch.push(q);
+  }
+  // اگر یک مبحث تنوع محدودی داشته باشد، بسته را با سؤال‌های معتبر همان درس کامل می‌کنیم.
+  while (batch.length < 20) {
+    const topic = pick(topics), source = (B.hard && HARD[topic] && HARD[topic].length) ? HARD[topic] : GEN[topic];
+    const q = pick(source)(); if (!q) break; q.subject = B.subject; q.topic = q.topic || topic; batch.push(q);
+  }
+  return batch;
+}
+function startFreshBatch() {
+  if (B.subject === 'all') { toast('اول یک درس مشخص انتخاب کن.'); return; }
+  B.batchMode = true; B.batch = buildFreshBatch();
+  if (B.batch.length < 20) toast(`فعلاً ${fa(B.batch.length)} سؤال قابل ساخت بود.`);
+  if (!B.batch.length) { toast('برای این درس هنوز مولد سؤال فعال نیست.'); return; }
+  B.total = B.batch.length; startBattle();
+}
+function makeQ() {
+  if (B.batchMode && B.batch.length) return B.batch.shift();
+  const allowedTopics = getTopicsForFilter();
+  const safeTopics = allowedTopics.length ? allowedTopics : (B.subject === 'all' ? TOPICS : Object.values(SUBJECTS[B.subject]?.chapters || {}).flat().filter(t=>GEN[t]));
+  const t = B.topic !== 'all' && safeTopics.includes(B.topic) ? B.topic : pick(safeTopics.length ? safeTopics : TOPICS);
+
+  if (B.online) {
+    const pool = packAll().filter(p => {
+      const subjectOk = B.subject === 'all' || p.subject === B.subject;
+      const topicOk = allowedTopics.includes(p.topic);
+      const hardOk = !B.hard || p.hard;
+      const chapterOk = B.chapter === 'all' || !p.chapter || p.chapter === B.chapter || p.chapter.includes(B.chapter.split(' · ')[0]);
+      return subjectOk && topicOk && hardOk && chapterOk;
+    });
+    if (pool.length) return packQ(pick(pool));
+  }
+  // هیچ‌وقت برای یک درس، سؤال درس دیگری را به‌عنوان جایگزین نشان نده.
+  if (!safeTopics.length) return fixed(B.subject, 'برای این درس هنوز سؤال کافی در بسته‌ی فعلی وجود ندارد. از بخش منابع سؤال مخصوص همین درس وارد کن.', 'متوجه شدم', ['ادامه','بازگشت','تلاش دوباره'], 'از بخش منابع، بسته‌ی سؤال همان درس را وارد کن.');
+  const src = (B.hard && HARD[t]) ? HARD[t] : GEN[t];
+  if (!src || !src.length) return fixed(B.subject, 'برای این مبحث هنوز سؤال آماده نشده است.', 'متوجه شدم', ['ادامه','بازگشت','منابع'], 'برای این مبحث سؤال اختصاصی اضافه کن.');
+  return pick(src)();
+}
+function nextQ() {
+  B.n++; B.cur = makeQ(); B.locked = false;
+  const q = B.cur;
+  $('#battle').innerHTML = `
+    ${backBar('خروج از نبرد')}
+    <div class="hud">
+      <span class="hearts" aria-label="${fa(B.hearts)} جان">${'♥'.repeat(B.hearts)}${'♡'.repeat(3 - B.hearts)}</span>
+      <span>سوال ${fa(B.n)} از ${fa(B.total)}</span>
+      <span>${B.combo >= 2 ? '🔥 ' + fa(B.combo) : ''}</span>
+    </div>
+    <div class="qcard"><span class="qtopic">${B.subject !== 'all' ? B.subject + ' · ' : ''}${q.topic}${B.hard ? ' 🔥 چالشی' : ''}</span><div>${q.q}</div></div>
+    <div class="opts">${q.opts.map((o, i) => `<button class="opt" data-i="${i}">${o.t.includes('<span') ? o.t : M(o.t)}</button>`).join('')}</div>
+    <div id="fbBox"></div>`;
+  document.querySelectorAll('.opt').forEach(b => b.onclick = () => answer(+b.dataset.i));
+  bindBattleBack(true);
+}
+function answer(i) {
+  if (B.locked) return; B.locked = true;
+  const q = B.cur, ok = q.opts[i].ok;
+  document.querySelectorAll('.opt').forEach((b, k) => {
+    b.disabled = true;
+    if (q.opts[k].ok) { b.classList.add('right'); b.insertAdjacentText('afterbegin', '✓ '); }
+    else if (k === i) { b.classList.add('wrong'); b.insertAdjacentText('afterbegin', '✗ '); }
+  });
+  let msg;
+  if (ok) {
+    B.combo++; B.right++; S.correct++;
+    const gain = (10 + Math.min(B.combo - 1, 5) * 2) * (B.hard ? 2 : 1); B.earned += gain;
+    msg = `<b class="g">${pick(PRAISE)} +${fa(gain)} امتیاز</b><br><b>روش تشریحی:</b> ${q.exp || 'ابتدا داده‌ها و خواسته را مشخص کن، سپس رابطه‌ی مرتبط را بنویس و مرحله‌به‌مرحله جای‌گذاری کن.'}<br><b>روش سریع تستی:</b> ${q.testExp || 'واحدها و حدود پاسخ را بررسی کن، گزینه‌های ناممکن را حذف کن و رابطه‌ی اصلی را سریع جای‌گذاری کن.'}`;
+    addXP(gain);
+  } else {
+    B.combo = 0; B.hearts--; S.mistakes = S.mistakes || []; S.mistakes.unshift({q:q.q, subject:q.subject || B.subject, topic:q.topic, chosen:q.opts[i]?.t, correct:q.opts.find(o=>o.ok)?.t, exp:q.exp || '', testExp:q.testExp || 'با حذف گزینه‌های ناممکن و بررسی واحدها/فرمول، سریع‌تر به پاسخ برس.', date:new Date().toLocaleDateString('fa-IR')}); S.mistakes=S.mistakes.slice(0,100); save();
+    msg = `<b class="r">${pick(COMFORT)}</b><br><b>روش تشریحی:</b> ${q.exp}<br><b>روش سریع تستی:</b> ${q.testExp || 'گزینه‌های ناممکن را حذف کن و فرمول اصلی را جای‌گذاری کن.'}`;
+  }
+  const last = B.n >= B.total || B.hearts <= 0;
+  $('#fbBox').innerHTML = `<div class="fb">${msg}</div><button class="btn" id="nextBtn">${last ? 'دیدن نتیجه' : 'سوال بعدی'}</button>`;
+  $('#nextBtn').onclick = last ? endBattle : nextQ;
+  $('#nextBtn').focus({ preventScroll: true });
+}
+function endBattle() {
+  const dead = B.hearts <= 0;
+  const emoji = dead ? '💪' : B.right >= 9 ? '🏆' : B.right >= 6 ? '🌟' : '🌱';
+  const line = dead ? 'جان‌هات تموم شد، ولی هر اشتباه یه درس بود.'
+    : B.right >= 9 ? 'فوق‌العاده! تقریباً بی‌نقص.' : B.right >= 6 ? 'خیلی خوب! یه کم دیگه تا بی‌نقص شدن.' : 'شروع خوبیه. هر بار بهتر می‌شی.';
+  $('#battle').innerHTML = `
+    ${backBar('منوی نبرد')}
+    <div class="big" aria-hidden="true">${emoji}</div>
+    <h2 style="text-align:center">${fa(B.right)} جواب درست</h2>
+    <p class="sub" style="text-align:center">${line}<br>${fa(B.earned)} امتیاز گرفتی و به برجت اضافه شد.</p>
+    <button class="btn alt" id="again">یه دور دیگه</button>
+    <button class="btn ghost" id="menu">تغییر درس / فصل</button>`;
+  $('#again').onclick = startBattle; $('#menu').onclick = battleMenu;
+  bindBattleBack(true);
+}
+
+/* ---------- quests ---------- */
+const SUGG = ['۱۰ تمرین حل کن', 'یه فصل مرور کن', 'فرمول‌ها رو بنویس', 'اشتباه‌های قبلی رو ببین'];
+function renderTasks() {
+  save();
+  $('#sugg').innerHTML = SUGG.map(s => `<button class="chip" data-s="${s}">+ ${s}</button>`).join('');
+  document.querySelectorAll('#sugg .chip').forEach(c => c.onclick = () => addTask(c.dataset.s));
+  const el = $('#tasks');
+  if (!S.tasks.length) { el.innerHTML = '<div class="none">هنوز ماموریتی نداری. یکی اضافه کن.</div>'; return; }
+  el.innerHTML = S.tasks.map((t, i) => `
+    <div class="task ${t.done ? 'done' : ''}">
+      <input type="checkbox" ${t.done ? 'checked disabled' : ''} data-i="${i}" aria-label="انجام شد">
+      <span>${t.t}</span>
+      ${t.done ? '' : `<button data-x="${i}" aria-label="حذف">×</button>`}
+    </div>`).join('');
+  el.querySelectorAll('input').forEach(c => c.onchange = () => {
+    const t = S.tasks[+c.dataset.i]; if (t.done) return; t.done = true; renderTasks(); addXP(15); toast('+۱۵ امتیاز. ماموریت انجام شد ✅');
+  });
+  el.querySelectorAll('button[data-x]').forEach(b => b.onclick = () => { S.tasks.splice(+b.dataset.x, 1); renderTasks(); });
+}
+function addTask(txt) {
+  txt = (txt || '').trim().replace(/[<>&]/g, ''); if (!txt) return;
+  S.tasks.unshift({ t: txt, done: false }); $('#taskIn').value = ''; renderTasks();
+}
+$('#taskAdd').onclick = () => addTask($('#taskIn').value);
+$('#taskIn').addEventListener('keydown', e => { if (e.key === 'Enter') addTask($('#taskIn').value); });
+
+
+/* ---------- online question packs ---------- */
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const PK = { urls: ['questions.json'], qs: [], imp: [], updated: '' };
+try { const d = JSON.parse(localStorage.getItem('borj-pack') || 'null'); if (d) Object.assign(PK, d); } catch (e) {}
+function savePK() { try { localStorage.setItem('borj-pack', JSON.stringify(PK)); } catch (e) {} }
+const packAll = () => PK.qs.concat(PK.imp);
+function parsePack(j) {
+  const arr = Array.isArray(j) ? j : (j && j.questions);
+  if (!Array.isArray(arr)) throw new Error('bad');
+  return arr.filter(x => x && typeof x.q === 'string' && Array.isArray(x.options) && x.options.length >= 2 && x.options.length <= 5 &&
+      Number.isInteger(x.answer) && x.answer >= 0 && x.answer < x.options.length).slice(0, 5000)
+    .map(x => ({
+      topic: String(x.topic || 'عمومی').slice(0, 30),
+      chapter: x.chapter ? String(x.chapter).slice(0, 40) : '',
+      subject: x.subject ? String(x.subject).slice(0, 20) : '',
+      q: String(x.q).slice(0, 400),
+      options: x.options.map(o => String(o).slice(0, 80)),
+      answer: x.answer,
+      exp: String(x.exp || '').slice(0, 400), testExp: String(x.testExp || '').slice(0, 400),
+      hard: !!x.hard
+    }));
+}
+function packQ(p) {
+  const opts = p.options.map((t, i) => ({ t: `<span dir="auto">${esc(t)}</span>`, ok: i === p.answer }));
+  const label = p.chapter ? `${p.topic} · ${p.chapter}` : p.topic;
+  return { subject: p.subject || '', topic: label, q: esc(p.q), opts: shuffle(opts), exp: esc(p.exp) || 'ادامه بده!', testExp: esc(p.testExp) }; 
+}
+function setStatus(msg) {
+  const el = $('#srcStatus'); if (el && el.nodeType) el.innerHTML = msg;
+}
+function statusLine() {
+  return `${fa(packAll().length)} سوال آنلاین/ذخیره‌شده دارم. آخرین به‌روزرسانی: ${PK.updated || 'هنوز نشده'}`;
+}
+async function fetchPacks(manual) {
+  if (!navigator.onLine) { if (manual) setStatus('به اینترنت وصل نیستی. از سوال‌های ذخیره‌شده استفاده می‌شه.'); return; }
+  let all = [], ok = 0, fail = 0;
+  for (const u of PK.urls) {
+    try {
+      const r = await fetch(u + (u.includes('?') ? '&' : '?') + 't=' + Date.now(), { cache: 'no-store' });
+      if (!r.ok) throw new Error('http');
+      all = all.concat(parsePack(await r.json())); ok++;
+    } catch (e) { fail++; }
+  }
+  if (ok) { PK.qs = all; PK.updated = new Date().toLocaleDateString('fa-IR'); savePK(); }
+  if (manual || ok) setStatus(`${statusLine()}${fail ? `<br>از ${fa(fail)} آدرس نتونستم بخونم (آدرس یا اجازه‌ی دسترسی سایت رو چک کن).` : ''}`);
+  if (document.querySelector('#goBattle')) battleMenu();
+}
+function renderSrc() {
+  $('#urlsIn').value = PK.urls.join('\n');
+  setStatus(statusLine());
+}
+$('#pkRefresh').onclick = () => { setStatus('در حال به‌روزرسانی...'); fetchPacks(true); };
+$('#pkSave').onclick = () => {
+  const u = $('#urlsIn').value.split('\n').map(x => x.trim()).filter(Boolean).slice(0, 20);
+  PK.urls = u.length ? u : ['questions.json']; savePK(); setStatus('آدرس‌ها ذخیره شد. در حال به‌روزرسانی...'); fetchPacks(true);
+};
+$('#pkImport').onclick = () => {
+  try {
+    const list = parsePack(JSON.parse($('#impIn').value));
+    if (!list.length) throw new Error('empty');
+    const seen = new Set(PK.imp.map(x => x.q));
+    PK.imp = PK.imp.concat(list.filter(x => !seen.has(x.q))).slice(0, 5000); savePK();
+    $('#impIn').value = ''; setStatus(`${fa(list.length)} سوال وارد شد. ${statusLine()}`);
+    if (document.querySelector('#goBattle')) battleMenu();
+  } catch (e) { setStatus('قالب سوال‌ها درست نیست. یه نمونه‌ی درست تو فایل questions.json هست.'); }
+};
+window.addEventListener('online', () => fetchPacks(false));
+
+
+/* ---------- game economy: rewards, shop and review ---------- */
+const SHOP=[
+{id:'aurora',name:'تم شفق قطبی',emoji:'🌌',price:90,desc:'رنگ‌های آبی و فیروزه‌ای',kind:'skin'},
+{id:'sunset',name:'تم غروب جادویی',emoji:'🌅',price:110,desc:'رنگ‌های گرم و صورتی',kind:'skin'},
+{id:'cosmos',name:'تم کهکشان',emoji:'🪐',price:140,desc:'فضایی بنفش و درخشان',kind:'skin'},
+{id:'forest',name:'تم جنگل افسون‌شده',emoji:'🌳',price:130,desc:'سبزهای آرام و طبیعی',kind:'skin'},
+{id:'ice',name:'تم سرزمین یخی',emoji:'❄️',price:150,desc:'آبی روشن و کریستالی',kind:'skin'},
+{id:'crown',name:'تاج طلایی',emoji:'👑',price:120,desc:'نشان افتخار کلکسیونر',kind:'collect'},
+{id:'owl',name:'جغد دانا',emoji:'🦉',price:160,desc:'همراه شب‌های مطالعه',kind:'collect'},
+{id:'dragon',name:'اژدهای کوچک',emoji:'🐉',price:260,desc:'نگهبان افسانه‌ای برج',kind:'collect'},
+{id:'phoenix',name:'ققنوس آتشین',emoji:'🔥',price:300,desc:'نماد دوباره برخاستن',kind:'collect'},
+{id:'unicorn',name:'تک‌شاخ رویاها',emoji:'🦄',price:240,desc:'موجود افسانه‌ای رنگین',kind:'collect'},
+{id:'rocket',name:'موشک پیشرفت',emoji:'🚀',price:100,desc:'یادگاری سرعت و استمرار',kind:'collect'},
+{id:'crystal',name:'کریستال دانش',emoji:'💎',price:190,desc:'گوهر کمیاب برج',kind:'collect'},
+{id:'wand',name:'چوب‌دستی جادو',emoji:'🪄',price:180,desc:'ابزار جادوگر دانایی',kind:'collect'},
+{id:'potion',name:'معجون تمرکز',emoji:'🧪',price:170,desc:'یادگاری کیمیاگرها',kind:'collect'},
+{id:'shield',name:'سپر دانایی',emoji:'🛡️',price:150,desc:'نشان دفاع در برابر حواس‌پرتی',kind:'collect'},
+{id:'sword',name:'شمشیر حل مسئله',emoji:'⚔️',price:210,desc:'برای نبرد با سؤال‌های سخت',kind:'collect'},
+{id:'star',name:'ستاره طلایی',emoji:'🌟',price:80,desc:'یک ستاره برای ویترین افتخارات',kind:'collect'},
+{id:'moon',name:'ماه نقره‌ای',emoji:'🌙',price:90,desc:'یادگار شب‌های پربار',kind:'collect'},
+{id:'comet',name:'دنباله‌دار',emoji:'☄️',price:130,desc:'ردی از تلاش و سرعت',kind:'collect'},
+{id:'planet',name:'سیاره ناشناخته',emoji:'🪐',price:175,desc:'کشف تازه در کهکشان دانش',kind:'collect'},
+{id:'book',name:'کتاب اسرار',emoji:'📕',price:125,desc:'کتابخانه‌ی کلکسیونی',kind:'collect'},
+{id:'medal',name:'مدال قهرمان',emoji:'🥇',price:220,desc:'مدال ویژه‌ی تلاش',kind:'collect'},
+{id:'trophy',name:'جام افسانه‌ای',emoji:'🏆',price:280,desc:'جام مخصوص برترین‌ها',kind:'collect'},
+{id:'heart',name:'قلب شجاعت',emoji:'💖',price:100,desc:'یادآور ادامه دادن',kind:'collect'},
+{id:'butterfly',name:'پروانه جادویی',emoji:'🦋',price:115,desc:'زیبایی در مسیر رشد',kind:'collect'},
+{id:'cat',name:'گربه کتابدار',emoji:'🐈',price:155,desc:'نگهبان کتاب‌های برج',kind:'collect'},
+{id:'fox',name:'روباه باهوش',emoji:'🦊',price:165,desc:'نماد زیرکی و دقت',kind:'collect'},
+{id:'robot',name:'ربات همراه',emoji:'🤖',price:200,desc:'دستیار کوچک آزمایشگاه',kind:'collect'},
+{id:'castle',name:'قلعه کوچک',emoji:'🏰',price:320,desc:'یادگار سازنده‌ی برج‌ها',kind:'collect'},
+{id:'rainbow',name:'رنگین‌کمان',emoji:'🌈',price:145,desc:'رنگی برای روزهای سخت',kind:'collect'}
+];
+function applySkin(){const skin=(S.owned||[]).includes(S.equipped)?S.equipped:'default';if(SHOP.some(x=>x.id===skin&&x.kind==='skin'))document.body.dataset.skin=skin;else delete document.body.dataset.skin;}
+function renderShop(){
+ applySkin();$('#coinBalance').textContent=fa(S.coins||0)+' 🪙';
+ const owned=S.owned||[];
+ $('#shopItems').innerHTML=SHOP.map(x=>{const has=owned.includes(x.id),equipped=S.equipped===x.id;return `<div class="shop-item"><div class="emoji">${x.emoji}</div><b>${x.name}</b><p class="sub">${x.desc}</p><small class="coin">${has?'در کلکسیون':fa(x.price)+' سکه'}</small><button class="btn ${has?'ghost':''}" data-item="${x.id}" ${!has&&(S.coins||0)<x.price?'':' '}>${equipped?'فعال است':has?(x.kind==='skin'?'استفاده از تم':'خریداری‌شده'):'خرید'}</button></div>`}).join('');
+ $('#shopItems').querySelectorAll('[data-item]').forEach(b=>b.onclick=()=>{const item=SHOP.find(x=>x.id===b.dataset.item),has=owned.includes(item.id);if(has){if(item.kind==='skin'){S.equipped=item.id;save();applySkin();renderShop();toast('✨ تم جدید فعال شد');}else toast('این آیتم در کلکسیون توست!');return;}if((S.coins||0)<item.price){toast('سکه‌هات کافی نیست!');return;}S.coins-=item.price;S.owned=S.owned||[];S.owned.push(item.id);if(item.kind==='skin')S.equipped=item.id;save();renderShop();toast('🎉 '+item.name+' به کلکسیونت اضافه شد!');});
+}
+function renderLeaderboard(){
+ const all=Object.entries(profiles).map(([key,p])=>({key,name:p.name||key,xp:Number(p.xp)||0,correct:Number(p.correct)||0,sessions:Number(p.sessions)||0,minutes:Number(p.minutes)||0,coins:Number(p.coins)||0}));
+ if(activeProfile&&!all.some(x=>x.key===activeProfile))all.push({key:activeProfile,name:S.name||'بازیکن',xp:S.xp||0,correct:S.correct||0,sessions:S.sessions||0,minutes:S.minutes||0,coins:S.coins||0});
+ all.sort((a,b)=>b.xp-a.xp||b.correct-a.correct||a.name.localeCompare(b.name,'fa'));
+ const mine=all.findIndex(x=>x.key===activeProfile);$('#leaderSummary').innerHTML=`رتبه‌ی فعلی تو: <b style="color:#ffda83">${mine<0?'—':fa(mine+1)+' از '+fa(all.length)}</b> · ${fa(S.xp||0)} XP`;
+ const medals=['🥇','🥈','🥉'];$('#leaderboardList').innerHTML=all.length?all.map((x,i)=>`<div class="leader-row ${x.key===activeProfile?'me':''}"><div class="rank-medal">${medals[i]||('#'+fa(i+1))}</div><div><div class="leader-name">${esc(x.name)} ${x.key===activeProfile?'(تو)':''}</div><div class="leader-meta">سطح ${fa(Math.floor(x.xp/100)+1)} · ${fa(x.correct)} پاسخ درست · ${fa(x.sessions)} جلسه</div><div class="leader-track"><i style="width:${Math.max(3,Math.min(100,x.xp/(Math.max(100,all[0].xp))*100))}%"></i></div></div><div class="leader-xp">${fa(x.xp)} XP</div></div>`).join(''):'<div class="none">هنوز بازیکنی ثبت نشده است.</div>';
+}
+function renderRewards(){const today=new Date().toISOString().slice(0,10);$('#dailyReward').disabled=S.dailyClaim===today;$('#dailyReward').textContent=S.dailyClaim===today?'جایزه‌ی امروز دریافت شد':'دریافت جایزه';$('#achievements').innerHTML=[['🌱 شروع‌کننده',S.xp>=10,'۱۰ امتیاز کسب کن'],['📚 کتاب‌خوان',S.sessions>=3,'۳ جلسه تمرکز'],['🎯 دقیق',S.correct>=20,'۲۰ پاسخ درست'],['🏗️ معمار',floorsCount()>=5,'۵ طبقه بساز']].map(a=>`<div class="reward"><span>${a[0]} ${a[2]}</span><b>${a[1]?'✅':'🔒'}</b></div>`).join('');$('#gameChallenges').innerHTML=`<div class="reward"><span>حل ۵ تست امروز</span><b>${fa(Math.min(5,S.correct))}/۵</b></div><div class="reward"><span>ساخت ۳ طبقه</span><b>${fa(Math.min(3,floorsCount()))}/۳</b></div>`;}
+$('#dailyReward').onclick=()=>{const today=new Date().toISOString().slice(0,10);if(S.dailyClaim===today)return;const prize=rnd(20,45);S.dailyClaim=today;S.coins=(S.coins||0)+prize;save();renderRewards();toast(`🎁 ${fa(prize)} سکه جایزه گرفتی!`);};
+function teacherForSubject(subject){const x=String(subject||'').replace(/\s/g,'');if(x.includes('شیمی'))return 'مصلایی';if(x.includes('هندسه'))return 'نرگس کارگر';if(x.includes('ریاضی'))return 'معین مرمی';if(x.includes('جغرافیا'))return 'شجاعی';return 'عمومی';}
+function teacherChoices(subject){const x=String(subject||'');const t=teacherForSubject(x);return [['عمومی','روش عمومی'],...(t==='مصلایی'?[['مصلایی','شیمی · مصلایی']]:[]),...(t==='نرگس کارگر'?[['نرگس کارگر','هندسه · نرگس کارگر']]:[]),...(t==='معین مرمی'?[['معین مرمی','ریاضی · معین مرمی']]:[]),...(t==='شجاعی'?[['شجاعی','جغرافیا · شجاعی']]:[])];}
+function teacherGuide(m,teacher){const subject=String(m.subject||'');const exp=String(m.exp||'برای این سؤال راه‌حل تشریحی اختصاصی ثبت نشده است. صورت سؤال و پاسخ درست را دوباره بررسی کن.');const fast=String(m.testExp||'ابتدا داده‌های کلیدی را جدا کن، گزینه‌های ناسازگار را حذف کن و پاسخ را با واحد یا مفهوم اصلی بسنج.');let steps=[];let quick='';if(teacher==='مصلایی'){steps=['داده‌ها و خواسته را از صورت سؤال جدا کن.','اگر مسئله‌ی مولی است، داده‌ها را به مول تبدیل کن: n = m ÷ M.','نسبت ضرایب واکنش را از معادله‌ی موازنه‌شده بردار.','در پایان واحد و رقم معنادار را بررسی کن.'];quick='جرم ← مول ← نسبت ضرایب ← تبدیل به واحد خواسته‌شده. در تست، اول گزینه‌ها را از نظر واحد و مرتبه‌ی بزرگی حذف کن.';}else if(teacher==='نرگس کارگر'){steps=['شکل را رسم یا کامل کن و داده‌ها را روی آن بنویس.','خواسته را مشخص کن و قضیه‌ی مرتبط را پیدا کن.','رابطه‌ها را مرحله‌به‌مرحله بنویس؛ دلیل هر تساوی را مشخص کن.','نتیجه را با شکل و شرط‌های مسئله کنترل کن.'];quick='شکل و علامت‌گذاری را سریع انجام بده؛ دنبال مثلث‌های هم‌نهشت/متشابه، زاویه‌های برابر و قضیه‌ی مناسب بگرد. فقط وقتی گزینه را انتخاب کن که شرط قضیه برقرار باشد.';}else if(teacher==='معین مرمی'){steps=['نوع سؤال و مبحث را تشخیص بده.','مجهول و داده‌ها را نمادگذاری کن.','فرمول یا رابطه‌ی اصلی را قبل از جای‌گذاری بنویس.','محاسبه را ساده و مرحله‌ای انجام بده و جواب را کنترل کن.'];quick='اول تیپ سؤال را تشخیص بده، فرمول مستقیم را بنویس و با جای‌گذاری یا حذف گزینه‌ها سرعت بگیر؛ دامنه و علامت جواب را کنترل کن.';}else if(teacher==='شجاعی'){steps=['موضوع و محدوده‌ی مکانی سؤال را مشخص کن.','کلیدواژه‌ها، داده‌های نقشه یا نمودار را استخراج کن.','رابطه‌ی علت و معلول یا مقایسه‌ی جغرافیایی را بنویس.','پاسخ را با داده‌ی سؤال و مقیاس مکانی تطبیق بده.'];quick='کلیدواژه‌ی مکانی و علت اصلی را پیدا کن؛ گزینه‌هایی را که با نقشه، مقیاس یا رابطه‌ی علت‌ومعلولی ناسازگارند حذف کن.';}else{steps=['داده‌ها و خواسته را مشخص کن.','مفهوم یا فرمول مرتبط را بنویس.','مرحله‌به‌مرحله حل کن و واحدها را کنترل کن.'];quick=fast;}return `<div class="teacher-guide"><b>🎓 چارچوب مرور · ${esc(teacher==='عمومی'?'روش عمومی':teacher)}</b><ol>${steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><p><b>راه‌حل تشریحی سؤال:</b> ${esc(exp)}</p><p><b>ترفند تستی:</b> ${esc(teacher==='عمومی'?fast:quick)}</p><p class="sub">این الگو یک چارچوب کمکی برای مرور است، نه نقل‌قول یا بازسازی قطعی روش تدریس مدرس.</p></div>`;}
+function renderMistakes(){const a=S.mistakes||[];const root=$('#mistakeList');root.innerHTML=a.length?a.map((m,i)=>{const choices=teacherChoices(m.subject);const preferred=teacherForSubject(m.subject);return `<div class="game-card mistake-card"><small>${esc(m.subject||'درس ثبت‌نشده')} · ${esc(m.topic||'مبحث')} · ${esc(m.date||'')}</small><p><b>${esc(m.q||'')}</b></p><p class="r">پاسخ تو: ${esc(String(m.chosen||''))}</p><p class="g">پاسخ درست: ${esc(String(m.correct||''))}</p><label class="sub" for="teacher-${i}">روش حل را انتخاب کن</label><select class="teacher-select" id="teacher-${i}" data-mistake-index="${i}">${choices.map(([v,l])=>`<option value="${esc(v)}" ${v===preferred?'selected':''}>${esc(l)}</option>`).join('')}</select><div class="teacher-output">${teacherGuide(m,preferred)}</div></div>`;}).join(''):'<div class="none">هنوز اشتباهی ثبت نشده؛ بعد از آزمون‌ها اینجا می‌بینیشون.</div>';root.querySelectorAll('.teacher-select').forEach(sel=>sel.addEventListener('change',()=>{const m=(S.mistakes||[])[Number(sel.dataset.mistakeIndex)];const out=sel.closest('.mistake-card')?.querySelector('.teacher-output');if(m&&out)out.innerHTML=teacherGuide(m,sel.value);}));}
+
+/* ---------- init ---------- */
+renderHead(); renderTower(); renderStats(); showTip();
+
+/* ---------- ورود و تعویض پروفایل ---------- */
+function showAuth() {
+  $('#authScreen').hidden = false; $('#mainApp').hidden = true;
+  $('#authName').value = ''; $('#authPin').value = ''; $('#authErr').textContent = '';
+  $('#authGo').textContent = 'ورود به برج';
+}
+function enterApp() {
+  $('#authScreen').hidden = true; $('#mainApp').hidden = false;
+  renderHead(); renderTower(); renderStats(); renderTasks(); renderShop(); renderRewards(); renderMistakes(); renderLeaderboard(); applySkin();
+}
+function tryAuth() {
+  const name = ($('#authName').value || '').trim().replace(/[<>&]/g, '').slice(0,24);
+  const pin = ($('#authPin').value || '').trim().slice(0,8);
+  const err = $('#authErr');
+  if (!name) { err.textContent = 'لطفاً یه نام وارد کن'; return; }
+  const key = profileKey(name), old = profiles[key];
+  if (old && old.pin && old.pin !== pin) { err.textContent = 'رمز این پروفایل درست نیست.'; return; }
+  loadProfile(name);
+  if (pin && !S.pin) S.pin = pin;
+  save(); enterApp(); toast('خوش اومدی ' + name + ' 👋');
+}
+$('#authGo').onclick = tryAuth;
+$('#authSkip').onclick = () => { loadProfile('مهمان'); enterApp(); };
+$('#authName').addEventListener('keydown', e => { if(e.key==='Enter') tryAuth(); });
+$('#authPin').addEventListener('keydown', e => { if(e.key==='Enter') tryAuth(); });
+const switcher = document.createElement('button'); switcher.className='back-btn'; switcher.type='button'; switcher.textContent='👤 تعویض کاربر'; switcher.style.margin='10px 0';
+switcher.onclick=()=>{save(); showAuth();};
+$('#tab-home').appendChild(switcher);
+
+// boot
+showAuth();
+renderDur(); drawClock(T.dur * 60); battleMenu(); renderTasks(); renderSrc(); fetchPacks(false);
+
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});
+</script>
+</body>
+</html>
